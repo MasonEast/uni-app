@@ -15,7 +15,7 @@
       </uni-grid-item>
       <uni-grid-item>
         <view class="icon" @click="goDetail('car')">
-          <image class="img_icon" src="@/static/png/a-car3.png" />
+          <image class="img_icon" src="@/static/png/a-car5.png" />
           <view>上班拼车</view>
         </view>
       </uni-grid-item>
