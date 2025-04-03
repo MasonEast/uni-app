@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4880862 */
-  src: url('iconfont.woff2?t=1743661265477') format('woff2'),
-       url('iconfont.woff?t=1743661265477') format('woff'),
-       url('iconfont.ttf?t=1743661265477') format('truetype');
+  src: url('iconfont.woff2?t=1743671269797') format('woff2'),
+       url('iconfont.woff?t=1743671269797') format('woff'),
+       url('iconfont.ttf?t=1743671269797') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,170 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-fabu:before {
+  content: "\e62f";
+}
+
+.icon-shouye:before {
+  content: "\e618";
+}
+
+.icon-icon-test:before {
+  content: "\e609";
+}
+
+.icon-shouye_zhuyeliang:before {
+  content: "\e60b";
+}
+
+.icon-shouye1:before {
+  content: "\e620";
+}
+
+.icon-shouye2:before {
+  content: "\e60d";
+}
+
+.icon-icon-test1:before {
+  content: "\e60e";
+}
+
+.icon-baobei:before {
+  content: "\e600";
+}
+
+.icon-liwu:before {
+  content: "\e601";
+}
+
+.icon-wentifankui:before {
+  content: "\e602";
+}
+
+.icon-jifen:before {
+  content: "\e70c";
+}
+
+.icon-jifen1:before {
+  content: "\e62b";
+}
+
+.icon-qianbao:before {
+  content: "\e610";
+}
+
+.icon-icon_salesPeople:before {
+  content: "\e63e";
+}
+
+.icon-paperplane:before {
+  content: "\e617";
+}
+
+.icon-xianbanshense-:before {
+  content: "\e622";
+}
+
+.icon-renwu:before {
+  content: "\e62c";
+}
+
+.icon-gonggaozhidu:before {
+  content: "\e628";
+}
+
+.icon-liwu1:before {
+  content: "\e616";
+}
+
+.icon-jifen2:before {
+  content: "\e61b";
+}
+
+.icon-liwu2:before {
+  content: "\e613";
+}
+
+.icon-wentijieda:before {
+  content: "\ec2e";
+}
+
+.icon-fabusekuai:before {
+  content: "\ec46";
+}
+
+.icon-fabucuxiao:before {
+  content: "\e606";
+}
+
+.icon-wenti:before {
+  content: "\e856";
+}
+
+.icon-task:before {
+  content: "\e61f";
+}
+
+.icon-hongbao:before {
+  content: "\e604";
+}
+
+.icon-xinxitougao:before {
+  content: "\e6bc";
+}
+
+.icon-dingdanqishou:before {
+  content: "\e672";
+}
+
+.icon-168-boy-2:before {
+  content: "\e603";
+}
+
+.icon-xianzhigongxiang:before {
+  content: "\e607";
+}
+
+.icon-wenti1:before {
+  content: "\e60a";
+}
+
+.icon-couples-therapy:before {
+  content: "\e608";
+}
+
+.icon-quanzi-tiyuyundong:before {
+  content: "\e629";
+}
+
+.icon-xuanshang:before {
+  content: "\e677";
+}
+
+.icon-shangbanmoshi:before {
+  content: "\e81a";
+}
+
+.icon-xiangqin:before {
+  content: "\e614";
+}
+
+.icon-a-car4:before {
+  content: "\e756";
+}
+
+.icon-a-car3:before {
+  content: "\e757";
+}
+
+.icon-a-car5:before {
+  content: "\e758";
+}
+
+.icon-xianzhihuanqian:before {
+  content: "\e63c";
 }
 
 .icon-fenlei:before {

@@ -16,7 +16,7 @@
     {
       "path": "pages/category/category",
       "style": {
-        "navigationBarTitleText": "分类"
+        "navigationBarTitleText": "发布任务"
       }
     },
 
@@ -24,6 +24,12 @@
       "path": "pages/user/user",
       "style": {
         "navigationBarTitleText": "我的"
+      }
+    },
+    {
+      "path": "pages/car/index",
+      "style": {
+        "navigationBarTitleText": "上班拼车"
       }
     }
   ],
@@ -36,21 +42,21 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "iconPath": "static/nav/home-off.png",
-        "selectedIconPath": "static/nav/home-on.png",
+        "iconPath": "static/nav/home.png",
+        "selectedIconPath": "static/nav/home_on.png",
         "text": "首页"
       },
       {
         "pagePath": "pages/category/category",
-        "iconPath": "static/nav/fl-off.png",
-        "selectedIconPath": "static/nav/fl-on.png",
-        "text": "分类"
+        "iconPath": "static/nav/fabu.png",
+        "selectedIconPath": "static/nav/fabu_on.png",
+        "text": "发布任务"
       },
 
       {
         "pagePath": "pages/user/user",
-        "iconPath": "static/nav/my-off.png",
-        "selectedIconPath": "static/nav/my-on.png",
+        "iconPath": "static/nav/me.png",
+        "selectedIconPath": "static/nav/me_on.png",
         "text": "我的"
       }
     ]

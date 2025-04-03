@@ -1,8 +1,43 @@
 <template>
   <view class="content">
-    <uni-badge text="1"></uni-badge>
-    <uni-badge text="2" type="success" @click="bindClick"></uni-badge>
-    <uni-badge text="3" type="primary" :inverted="true"></uni-badge>
+    <uni-grid class="icons" :column="4" :showBorder="false" :square="false">
+      <uni-grid-item>
+        <view class="icon">
+          <image class="img_icon" src="@/static/png/task.png" />
+          <view>任务大厅</view>
+        </view>
+      </uni-grid-item>
+      <uni-grid-item>
+        <view class="icon">
+          <image class="img_icon" src="@/static/png/168-boy-2.png" />
+          <view>娃娃接送</view>
+        </view>
+      </uni-grid-item>
+      <uni-grid-item>
+        <view class="icon" @click="goDetail('car')">
+          <image class="img_icon" src="@/static/png/a-car3.png" />
+          <view>上班拼车</view>
+        </view>
+      </uni-grid-item>
+      <uni-grid-item>
+        <view class="icon">
+          <image class="img_icon" src="@/static/png/gonggaozhidu.png" />
+          <view>便民信息</view>
+        </view>
+      </uni-grid-item>
+      <uni-grid-item>
+        <view class="icon">
+          <image class="img_icon" src="@/static/png/couples-therapy.png" />
+          <view>相亲角</view>
+        </view>
+      </uni-grid-item>
+      <uni-grid-item>
+        <view class="icon">
+          <image class="img_icon" src="@/static/png/xianzhigongxiang.png" />
+          <view>闲置互换</view>
+        </view>
+      </uni-grid-item>
+    </uni-grid>
   </view>
 </template>
 
@@ -24,6 +59,11 @@ export default {
         url: pagePath,
       });
     },
+    goDetail(type) {
+      uni.navigateTo({
+        url: "/pages/car/index",
+      });
+    },
     input(e) {
       console.log("输入内容：", e);
     },
@@ -37,13 +77,34 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #3cc51f;
+  width: 100%;
+  // background-color: #3cc51f;
+  .icons {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    .custom_grid {
+      width: 100%;
+    }
+
+    .icon {
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .img_icon {
+        width: 40px;
+        height: 40px;
+        margin-top: 20px;
+        margin-bottom: 5px;
+      }
+    }
+  }
 }
 
 .logo {
