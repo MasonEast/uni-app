@@ -1,5 +1,34 @@
 <template>
   <view class="content">
+    <uni-section
+      title="关闭按钮"
+      subTitle="使用 show-close 属性,可关闭通知"
+      type="line"
+    >
+      <uni-notice-bar
+        show-close
+        single
+        text="HBuilderX 1.0正式发布！uni-app实现里程碑突破实现里程碑突破！"
+      />
+    </uni-section>
+    <uni-section
+      title="默认"
+      subTitle="使用 focus 属性自动获取输入框焦点"
+      type="line"
+      padding
+    >
+      <uni-easyinput
+        errorMessage
+        v-model="value"
+        focus
+        placeholder="请输入内容"
+        @input="input"
+      ></uni-easyinput>
+    </uni-section>
+    <image class="logo" src="/static/logo.png"></image>
+    <view class="text-area">
+      <text class="title">{{ title }}</text>
+    </view>
     <uni-badge text="1"></uni-badge>
     <uni-badge text="2" type="success" @click="bindClick"></uni-badge>
     <uni-badge text="3" type="primary" :inverted="true"></uni-badge>
@@ -14,16 +43,8 @@ export default {
       title: "Hello",
     };
   },
-  onLoad() {
-    this.currentPage = "/" + options.__route__.split("/").pop();
-  },
+  onLoad() {},
   methods: {
-    handleTabChange(pagePath) {
-      this.currentPage = pagePath;
-      uni.switchTab({
-        url: pagePath,
-      });
-    },
     input(e) {
       console.log("输入内容：", e);
     },
@@ -43,7 +64,6 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #3cc51f;
 }
 
 .logo {
@@ -63,41 +83,5 @@ export default {
 .title {
   font-size: 36rpx;
   color: #8f8f94;
-}
-
-.tabbar {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100rpx; /* 根据设计稿调整高度 */
-  background-color: #ffffff;
-  border-top: 1px solid #eaeaea;
-  padding: 0 20rpx;
-  box-sizing: border-box;
-  z-index: 1000;
-}
-
-.tabbar-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #7a7e83;
-}
-
-.tabbar-item.active {
-  color: #3cc51f; /* 选中颜色 */
-}
-
-.iconfont {
-  font-size: 40rpx; /* 图标大小 */
-}
-
-.tabbar-label {
-  font-size: 24rpx;
-  margin-top: 4rpx;
 }
 </style>

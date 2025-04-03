@@ -14,16 +14,8 @@ export default {
       title: "Hello",
     };
   },
-  onLoad() {
-    this.currentPage = "/" + options.__route__.split("/").pop();
-  },
+  onLoad() {},
   methods: {
-    handleTabChange(pagePath) {
-      this.currentPage = pagePath;
-      uni.switchTab({
-        url: pagePath,
-      });
-    },
     input(e) {
       console.log("输入内容：", e);
     },
@@ -43,7 +35,6 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #3cc51f;
 }
 
 .logo {
@@ -63,41 +54,5 @@ export default {
 .title {
   font-size: 36rpx;
   color: #8f8f94;
-}
-
-.tabbar {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 100rpx; /* 根据设计稿调整高度 */
-  background-color: #ffffff;
-  border-top: 1px solid #eaeaea;
-  padding: 0 20rpx;
-  box-sizing: border-box;
-  z-index: 1000;
-}
-
-.tabbar-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #7a7e83;
-}
-
-.tabbar-item.active {
-  color: #3cc51f; /* 选中颜色 */
-}
-
-.iconfont {
-  font-size: 40rpx; /* 图标大小 */
-}
-
-.tabbar-label {
-  font-size: 24rpx;
-  margin-top: 4rpx;
 }
 </style>
