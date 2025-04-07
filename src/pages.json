@@ -31,6 +31,18 @@
       "style": {
         "navigationBarTitleText": "上班拼车"
       }
+    },
+    {
+      "path": "pages/partner/index",
+      "style": {
+        "navigationBarTitleText": "找搭子"
+      }
+    },
+    {
+      "path": "pages/partner/components/detail",
+      "style": {
+        "navigationBarTitleText": "找搭子"
+      }
     }
   ],
 

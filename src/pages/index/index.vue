@@ -38,6 +38,20 @@
         </view>
       </uni-grid-item>
     </uni-grid>
+    <scroll-view scroll-y>
+      <view
+        class="scroll_item"
+        v-for="(item, index) in items"
+        :key="index"
+        @click="goItemDetail('partner')"
+      >
+        <view class="title"> {{ item.title }} </view>
+        <view class="content">
+          <view> {{ item.time }} </view>
+          <view> {{ item.place }} </view>
+        </view>
+      </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -47,6 +61,14 @@ export default {
     return {
       value: "",
       title: "Hello",
+      items: [
+        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
+        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
+        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
+        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
+        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
+        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
+      ],
     };
   },
   onLoad() {
@@ -61,7 +83,12 @@ export default {
     },
     goDetail(type) {
       uni.navigateTo({
-        url: "/pages/car/index",
+        url: `/pages/${type}/index`,
+      });
+    },
+    goItemDetail(type) {
+      uni.navigateTo({
+        url: `/pages/${type}/components/detail`,
       });
     },
     input(e) {
@@ -83,7 +110,7 @@ export default {
   // background-color: #3cc51f;
   .icons {
     width: 100%;
-    height: 300px;
+    // height: 300px;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
@@ -107,23 +134,22 @@ export default {
   }
 }
 
-.logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin-top: 200rpx;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 50rpx;
-}
-
-.text-area {
-  display: flex;
-  justify-content: center;
-}
-
-.title {
-  font-size: 36rpx;
-  color: #8f8f94;
+.scroll_item {
+  color: #fff;
+  background-color: #ccc;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  .title {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .content {
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
 .tabbar {
@@ -132,10 +158,10 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100rpx; /* 根据设计稿调整高度 */
+  height: 100px; /* 根据设计稿调整高度 */
   background-color: #ffffff;
   border-top: 1px solid #eaeaea;
-  padding: 0 20rpx;
+  padding: 0 20px;
   box-sizing: border-box;
   z-index: 1000;
 }
@@ -154,11 +180,11 @@ export default {
 }
 
 .iconfont {
-  font-size: 40rpx; /* 图标大小 */
+  font-size: 40px; /* 图标大小 */
 }
 
 .tabbar-label {
-  font-size: 24rpx;
-  margin-top: 4rpx;
+  font-size: 24px;
+  margin-top: 4px;
 }
 </style>
