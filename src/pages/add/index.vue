@@ -247,18 +247,6 @@ export default {
   }
 }
 
-.btn_draft {
-  width: 100px;
-  height: 30px;
-  font-size: 16px;
-}
-.btn_submit {
-  color: #fff;
-  background-color: #2979ff;
-  font-size: 16px;
-  height: 30px;
-}
-
 .submit {
   display: flex;
   align-items: center;
@@ -268,6 +256,18 @@ export default {
   position: fixed;
   bottom: 0;
   z-index: 1000;
+
+  .btn_draft {
+    width: 100px;
+    height: 30px;
+    font-size: 16px;
+  }
+  .btn_submit {
+    color: #fff;
+    background-color: #2979ff;
+    font-size: 16px;
+    height: 30px;
+  }
 }
 
 :deep(.uni-select) {
