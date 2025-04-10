@@ -1,6 +1,28 @@
 <template>
-  <view class="content">
-    <uni-swiper-dot
+  <view class="home">
+    <view class="header">
+      <view class="header_content">
+        <view class="hot">
+          <view>上热门</view>
+        </view>
+        <view class="moment">
+          <view>活动时刻</view>
+        </view>
+      </view>
+      <view class="header_content">
+        <view class="group">
+          <view>活动分队</view>
+        </view>
+
+        <view class="hall">
+          <view>活动大厅</view>
+        </view>
+        <view class="hole">
+          <view>小区树洞</view>
+        </view>
+      </view>
+    </view>
+    <!-- <uni-swiper-dot
       :info="info"
       :current="current"
       field="content"
@@ -13,7 +35,7 @@
           </view>
         </swiper-item>
       </swiper>
-    </uni-swiper-dot>
+    </uni-swiper-dot> -->
     <uni-grid class="icons" :column="4" :showBorder="false" :square="false">
       <uni-grid-item>
         <view class="icon">
@@ -59,10 +81,31 @@
         :key="index"
         @click="goItemDetail('partner')"
       >
-        <view class="title"> {{ item.title }} </view>
-        <view class="content">
-          <view> {{ item.time }} </view>
-          <view> {{ item.place }} </view>
+        <view class="scroll_title"> {{ item.title }} </view>
+        <view class="scroll_content">
+          <view class="scroll_user">
+            <image class="avatar" :src="item.user?.avatar" />
+            <view class="name">{{ item.user?.name }}</view>
+            <view class="intro">{{ item.user?.intro }}</view>
+            <view class="classify">{{ item.user?.classify }}</view>
+          </view>
+          <view class="scroll_time">
+            <uni-tag
+              text="进行中"
+              custom-style="background-color: #56e0e0; border-color: #56e0e0; color: #fff; font-size: 10px; padding: 1px 3px;"
+            >
+            </uni-tag>
+            <view class="time"> {{ item.time }} </view>
+            <view> {{ item.place }} </view>
+          </view>
+        </view>
+        <view class="img_group">
+          <image
+            class="scroll_img"
+            v-for="(img, index) in item.imgs"
+            :key="index"
+            :src="img"
+          />
         </view>
       </view>
     </scroll-view>
@@ -89,12 +132,42 @@ export default {
       current: 0,
       mode: "default",
       items: [
-        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
-        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
-        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
-        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
-        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
-        { time: "2024-05-23", place: "吾悦广场", title: "找逛街搭子啦" },
+        {
+          time: "2024-05-23 14:00",
+          place: "小区东门口",
+          title: "找逛街搭子啦",
+          user: {
+            name: "梅超风",
+            intro: "健身达人",
+            classify: "# 徒步",
+            avatar: "/static/img/1.jpg",
+          },
+          imgs: ["/static/img/1.jpg", "/static/img/2.jpg", "/static/img/3.jpg"],
+        },
+        {
+          time: "2024-05-23 14:00",
+          place: "小区东门口",
+          title: "周末去绿道骑行",
+          user: {
+            name: "梅超风",
+            intro: "健身达人",
+            classify: "# 徒步",
+            avatar: "/static/img/1.jpg",
+          },
+          imgs: ["/static/img/1.jpg", "/static/img/2.jpg", "/static/img/3.jpg"],
+        },
+        {
+          time: "2024-05-23 14:00",
+          place: "书房幼儿园",
+          title: "求个好邻居帮忙接下娃娃，有偿~",
+          user: {
+            name: "梅超风",
+            intro: "健身达人",
+            classify: "# 徒步",
+            avatar: "/static/img/1.jpg",
+          },
+          imgs: ["/static/img/1.jpg", "/static/img/2.jpg", "/static/img/3.jpg"],
+        },
       ],
     };
   },
@@ -131,12 +204,61 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.content {
+<style lang="scss" scoped>
+@use "variables";
+@use "mixins";
+
+.home {
   width: 100%;
+  height: 100vh;
+  background-color: #f5f7fa;
+  box-sizing: border-box;
+  .header {
+    height: 300px;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+    // background-color: #56e0e0;
+    background-color: rgb(153, 255, 255, 0.5);
+    .header_content {
+      width: 100%;
+    }
+    .hot {
+      height: 190px;
+      background-color: variables.$pure-bgc;
+      margin: 10px;
+      border-radius: 10px;
+    }
+    .moment {
+      height: 80px;
+      background-color: variables.$pure-bgc;
+      margin: 0 10px 10px 10px;
+      border-radius: 10px;
+    }
+    .group {
+      height: 140px;
+      background-color: variables.$pure-bgc;
+      margin: 10px 10px 10px 0;
+      border-radius: 10px;
+    }
+    .hall {
+      height: 60px;
+      background-color: variables.$pure-bgc;
+      margin: 0 10px 10px 0;
+      border-radius: 10px;
+    }
+    .hole {
+      height: 60px;
+      background-color: variables.$pure-bgc;
+      margin: 0 10px 10px 0;
+      border-radius: 10px;
+    }
+  }
   // background-color: #3cc51f;
   .icons {
     width: 100%;
+    background-color: #fff;
+    padding-bottom: 20px;
     // height: 300px;
     display: flex;
     justify-content: space-around;
@@ -162,20 +284,55 @@ export default {
 }
 
 .scroll_item {
-  color: #fff;
-  background-color: #ccc;
+  // color: #fff;
+  background-color: #fff;
   margin: 10px;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  .title {
+  .scroll_title {
     font-size: 16px;
     margin-bottom: 10px;
   }
-  .content {
+  .scroll_user {
+    margin-bottom: 10px;
+    display: flex;
+    // justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-size: 12px;
+    .avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
+    .name {
+      margin: 0 10px;
+    }
+    .intro {
+      color: #999;
+      margin-right: 5px;
+    }
+    .classify {
+      color: #999;
+    }
+  }
+  .scroll_time {
     font-size: 12px;
     display: flex;
+    margin-bottom: 10px;
+    // justify-content: space-between;
+    .time {
+      margin: 0 10px 0 5px;
+    }
+  }
+  .img_group {
+    display: flex;
     justify-content: space-between;
+    .scroll_img {
+      width: 33%;
+      height: 100px;
+    }
   }
 }
 
@@ -194,11 +351,9 @@ export default {
 }
 
 .tabbar-item {
+  @include mixins.flex-center;
   flex: 1;
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   color: #7a7e83;
 }
 

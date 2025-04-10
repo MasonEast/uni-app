@@ -9,7 +9,8 @@
       <swiper class="swiper-box" @change="change">
         <swiper-item v-for="(item, index) in info" :key="index">
           <view class="swiper-item" :class="'swiper-item' + index">
-            {{ item.content }}
+            <img class="swiper-img" :src="item.img" />
+            <!-- <image class="img" src="@/static/img/1.jpg" /> -->
           </view>
         </swiper-item>
       </swiper>
@@ -74,12 +75,19 @@ export default {
       info: [
         {
           content: "内容 A",
+          img: "/static/img/1.jpg",
         },
         {
           content: "内容 B",
+          img: "/static/img/2.jpg",
         },
         {
           content: "内容 C",
+          img: "/static/img/3.jpg",
+        },
+        {
+          content: "内容 C",
+          img: "/static/img/4.jpg",
         },
       ],
     };
@@ -174,6 +182,7 @@ export default {
       }
       .name {
         font-size: 10px;
+        margin-left: 5px;
       }
     }
 
@@ -185,6 +194,7 @@ export default {
   }
 
   .activity_intro {
+    margin-bottom: 60px !important;
     .title {
       font-size: 16px;
       color: #999;
@@ -193,7 +203,7 @@ export default {
     .content {
       font-size: 14px;
       color: #333;
-      margin: 10px 8px;
+      margin: 10px 8px 80px 8px;
     }
   }
 }
@@ -235,7 +245,7 @@ export default {
 }
 
 .swiper-box {
-  height: 200px;
+  height: 600px;
 }
 
 .swiper-item {
@@ -245,8 +255,12 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 200px;
+  height: 600px;
   color: #fff;
+  .swiper-img {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .swiper-item0 {
