@@ -32,14 +32,14 @@
     </view>
     <view class="card publisher">
       <view class="user">
-        <image class="img" src="@/static/png/a-car5.png" />
+        <image class="img" src="@/static/img/1.jpg" />
         <view class="content">
           <view class="name">梅超风</view>
           <view class="intro">我擅长九阴白骨爪</view>
         </view>
       </view>
       <view class="contact">
-        <img class="img" src="@/static/png/xiangqin.png" />
+        <img class="img" src="@/static/png/weixin.png" />
         <view class="name">微信</view>
       </view>
     </view>
@@ -111,6 +111,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "variables";
+
 .partner_detail {
   width: 100%;
   height: 100vh;
@@ -238,7 +240,7 @@ export default {
   }
   .btn_submit {
     color: #fff;
-    background-color: #2979ff;
+    background-color: variables.$primary-color;
     font-size: 16px;
     height: 30px;
   }

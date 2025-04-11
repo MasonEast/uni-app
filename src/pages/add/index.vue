@@ -140,9 +140,9 @@ export default {
         { value: 2, text: "上班拼车" },
       ],
       styles: {
-        color: "#2979FF",
+        color: "#56e0e0",
       },
-      placeholderStyle: "color:#2979FF; font-size:18px",
+      placeholderStyle: "color:#56e0e0; font-size:18px",
     };
   },
   watch: {
@@ -173,6 +173,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@use "variables";
+
 .content {
   width: 100%;
   height: 100vh;
@@ -264,7 +266,7 @@ export default {
   }
   .btn_submit {
     color: #fff;
-    background-color: #2979ff;
+    background-color: variables.$primary-color;
     font-size: 16px;
     height: 30px;
   }

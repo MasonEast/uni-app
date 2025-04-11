@@ -3,22 +3,57 @@
     <view class="header">
       <view class="header_content">
         <view class="hot">
-          <view>上热门</view>
+          <img class="hot_img" src="@/static/png/hot.png" alt="" />
+          <view class="hot_item" v-for="(item, index) in hotList" :key="index">
+            <view>{{ index + 1 }}</view>
+            <img class="hot_item_img" :src="item.img" alt="" />
+            <view class="hot_item_name">{{ item.name }}</view>
+            <view class="hot_item_num">{{ item.hot }}</view>
+            <img class="hot_item_hot" src="@/static/png/hot1.png" alt="" />
+          </view>
         </view>
         <view class="moment">
-          <view>活动时刻</view>
+          <view class="moment_header">
+            <view>
+              <view class="header_title">活动时刻</view>
+              <view class="header_tip">分享美好瞬间</view>
+            </view>
+            <img class="header_img" src="@/static/png/xiangji.png" alt="" />
+          </view>
+          <view class="moment_imgs">
+            <image
+              class="moment_img"
+              v-for="(img, index) in momentList"
+              :key="index"
+              :src="img"
+            />
+          </view>
         </view>
       </view>
       <view class="header_content">
         <view class="group">
-          <view>活动分队</view>
+          <view class="header_title">活动分队</view>
+          <view class="header_tip">覆盖整个小区 | 共1000+群成员</view>
+          <image
+            class="participant_avatar"
+            v-for="(img, index) in momentList"
+            :key="index"
+            :src="img"
+          />
+          <view class="btn">开聊 Go</view>
+          <img class="chat_img" src="@/static/png/liaotian.png" alt="" />
+          <img class="happy_img" src="@/static/png/kaixin.png" alt="" />
         </view>
 
         <view class="hall">
-          <view>活动大厅</view>
+          <view class="header_title">吃瓜现场</view>
+          <view class="header_tip">吃瓜群众在哪里？</view>
+          <img class="img" src="@/static/png/chigua.png" alt="" />
         </view>
         <view class="hole">
-          <view>小区树洞</view>
+          <view class="header_title">吃瓜现场</view>
+          <view class="header_tip">吃瓜群众在哪里？</view>
+          <img class="img" src="@/static/png/chigua.png" alt="" />
         </view>
       </view>
     </view>
@@ -107,6 +142,18 @@
             :src="img"
           />
         </view>
+        <view class="participants">
+          <view class="participants_group">
+            <image
+              class="participant_avatar"
+              v-for="(img, index) in item.imgs"
+              :key="index"
+              :src="img"
+            />
+            <view class="participant_num">17人想去</view>
+          </view>
+          <view class="participant_btn">上车</view>
+        </view>
       </view>
     </scroll-view>
   </view>
@@ -118,6 +165,29 @@ export default {
     return {
       value: "",
       title: "Hello",
+      hotList: [
+        {
+          name: "代买菜",
+          hot: 998,
+          img: "/static/png/maicai.png",
+        },
+        {
+          name: "娃娃接送",
+          hot: 857,
+          img: "/static/png/kanhuxiaohaifuwu.png",
+        },
+        {
+          name: "公园野营",
+          hot: 668,
+          img: "/static/png/gongyuan.png",
+        },
+      ],
+      momentList: [
+        "/static/img/5.jpg",
+        "/static/img/6.jpg",
+        "/static/img/7.jpg",
+        "/static/img/8.jpg",
+      ],
       info: [
         {
           content: "内容 A",
@@ -224,34 +294,180 @@ export default {
       width: 100%;
     }
     .hot {
-      height: 190px;
-      background-color: variables.$pure-bgc;
-      margin: 10px;
-      border-radius: 10px;
-    }
-    .moment {
-      height: 80px;
-      background-color: variables.$pure-bgc;
-      margin: 0 10px 10px 10px;
-      border-radius: 10px;
-    }
-    .group {
       height: 140px;
       background-color: variables.$pure-bgc;
-      margin: 10px 10px 10px 0;
+      margin: 10px;
+      padding: 10px;
       border-radius: 10px;
+      .hot_img {
+        width: 50%;
+        height: 30px;
+        // margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      .hot_item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        font-size: 12px;
+        font-weight: 500;
+        .hot_item_img {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          margin-left: 5px;
+        }
+        .hot_item_name {
+          width: 72px;
+          color: #333;
+          line-height: 30px;
+        }
+        .hot_item_num {
+          color: #999;
+        }
+        .hot_item_hot {
+          width: 20px;
+          height: 20px;
+          margin-left: 5px;
+        }
+      }
+    }
+    .moment {
+      height: 90px;
+      background-color: variables.$pure-bgc;
+      margin: 0 10px 10px 10px;
+      padding: 10px;
+      border-radius: 10px;
+      .moment_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        .header_title {
+          font-size: 14px;
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+        .header_tip {
+          font-size: 10px;
+          color: #999;
+        }
+        .header_img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          transform: rotate(45deg);
+        }
+      }
+      .moment_imgs {
+        display: flex;
+        justify-content: space-between;
+        .moment_img {
+          width: 24%;
+          height: 40px;
+          border-radius: 6px;
+        }
+      }
+    }
+    .group {
+      position: relative;
+      height: 110px;
+      background-color: variables.$pure-bgc;
+      margin: 10px 10px 10px 0;
+      padding: 10px;
+      border-radius: 10px;
+      .header_title {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .header_tip {
+        font-size: 10px;
+        color: #999;
+        margin-bottom: 5px;
+      }
+      .participant_avatar {
+        width: 15px;
+        height: 15px;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        margin-right: -5px;
+        margin-bottom: 15px;
+      }
+      .btn {
+        @include mixins.flex-center;
+        color: #56e0e0;
+        background-color: #000;
+        font-size: 12px;
+        font-weight: 500;
+        width: 60px;
+        height: 25px;
+        border-radius: 25px;
+      }
+      .chat_img {
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        right: 70px;
+        bottom: 9px;
+      }
+      .happy_img {
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        right: 32px;
+        bottom: 32px;
+      }
     }
     .hall {
-      height: 60px;
+      height: 45px;
       background-color: variables.$pure-bgc;
       margin: 0 10px 10px 0;
+      padding: 10px;
       border-radius: 10px;
+      position: relative;
+      .header_title {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .header_tip {
+        font-size: 10px;
+        color: #999;
+        margin-bottom: 5px;
+      }
+      .img {
+        width: 45px;
+        height: 40px;
+        position: absolute;
+        right: 30px;
+        bottom: 12px;
+      }
     }
     .hole {
-      height: 60px;
+      height: 45px;
       background-color: variables.$pure-bgc;
       margin: 0 10px 10px 0;
+      padding: 10px;
       border-radius: 10px;
+      position: relative;
+      .header_title {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .header_tip {
+        font-size: 10px;
+        color: #999;
+        margin-bottom: 5px;
+      }
+      .img {
+        width: 45px;
+        height: 40px;
+        position: absolute;
+        right: 30px;
+        bottom: 12px;
+      }
     }
   }
   // background-color: #3cc51f;
@@ -332,6 +548,40 @@ export default {
     .scroll_img {
       width: 33%;
       height: 100px;
+    }
+  }
+  .participants {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 10px;
+    color: #999;
+    .participants_group {
+      display: flex;
+      align-items: center;
+      .participant_avatar {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #fff;
+        border-radius: 50%;
+        margin-right: -10px;
+      }
+      .participant_num {
+        margin-left: 15px;
+      }
+    }
+
+    .participant_btn {
+      @include mixins.flex-center;
+      color: #56e0e0;
+      background-color: #000;
+      font-size: 14px;
+      font-weight: bold;
+      width: 60px;
+      height: 25px;
+      border-radius: 25px;
     }
   }
 }
