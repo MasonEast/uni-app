@@ -10,7 +10,15 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "首页"
+        "navigationBarTitleText": "首页",
+        "navigationBarBackgroundColor": "#CCFFFF"
+      }
+    },
+    {
+      "path": "pages/square/index",
+      "style": {
+        "navigationBarTitleText": "广场",
+        "navigationBarBackgroundColor": "#CCFFFF"
       }
     },
     {
@@ -19,7 +27,13 @@
         "navigationBarTitleText": "发布任务"
       }
     },
-
+    {
+      "path": "pages/news/index",
+      "style": {
+        "navigationBarTitleText": "消息",
+        "navigationBarBackgroundColor": "#CCFFFF"
+      }
+    },
     {
       "path": "pages/user/user",
       "style": {
@@ -55,7 +69,7 @@
 
   "tabBar": {
     "color": "#909399",
-    "selectedColor": "#303133",
+    "selectedColor": "#56e0e0",
     "backgroundColor": "#FFFFFF",
     "borderStyle": "black",
     "list": [
@@ -66,12 +80,29 @@
         "text": "首页"
       },
       {
+        "pagePath": "pages/square/index",
+        "iconPath": "static/nav/square.png",
+        "selectedIconPath": "static/nav/square_on.png",
+        "text": "广场"
+      },
+      {
         "pagePath": "pages/add/index",
         "iconPath": "static/nav/fabu.png",
         "selectedIconPath": "static/nav/fabu_on.png",
-        "text": "发布任务"
+        "text": "发布任务",
+        "style": {
+          "height": "50px",
+          "width": "50px",
+          "fontSize": "20px",
+          "marginTop": "-10px"
+        }
       },
-
+      {
+        "pagePath": "pages/news/index",
+        "iconPath": "static/nav/news.png",
+        "selectedIconPath": "static/nav/news_on.png",
+        "text": "消息"
+      },
       {
         "pagePath": "pages/user/user",
         "iconPath": "static/nav/me.png",
