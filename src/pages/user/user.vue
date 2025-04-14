@@ -1,5 +1,8 @@
 <template>
   <view class="user">
+    <view class="navigationBar">
+      <img @click="goSet" class="img" src="@/static/png/shezhi.png" alt="" />
+    </view>
     <view class="header">
       <view class="card">
         <view class="img-box">
@@ -37,13 +40,9 @@ export default {
   },
   onLoad() {},
   methods: {
-    input(e) {
-      console.log("输入内容：", e);
-    },
-    iconClick(type) {
-      uni.showToast({
-        title: `点击了${type === "prefix" ? "左侧" : "右侧"}的图标`,
-        icon: "none",
+    goSet() {
+      uni.navigateTo({
+        url: `/pages/user/components/set`,
       });
     },
   },
@@ -53,10 +52,23 @@ export default {
 <style lang="scss" scoped>
 @use "variables";
 .user {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  .navigationBar {
+    background: linear-gradient(
+      to bottom,
+      rgb(153, 255, 255, 0.7),
+      rgb(153, 255, 255, 0.5)
+    );
+    display: flex;
+    align-items: center;
+    height: 80px;
+    padding: 10px;
+
+    .img {
+      margin-top: 36px;
+      width: 20px;
+      height: 20px;
+    }
+  }
   .header {
     width: 100%;
     height: 180px;

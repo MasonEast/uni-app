@@ -24,7 +24,13 @@
       "path": "pages/user/user",
       "style": {
         "navigationBarTitleText": "我的",
-        "backgroundColor": "#CCFFFF"
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/components/set",
+      "style": {
+        "navigationBarTitleText": "设置"
       }
     },
     {
@@ -78,6 +84,6 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",
     "backgroundColor": "#F8F8F8",
-    "navigationBarBackgroundColor": "#F5F7FA"
+    "navigationBarBackgroundColor": "#f5f7fa"
   }
 }
