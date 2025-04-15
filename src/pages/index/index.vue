@@ -51,8 +51,8 @@
           <img class="img" src="@/static/png/chigua.png" alt="" />
         </view>
         <view class="hole">
-          <view class="header_title">吃瓜现场</view>
-          <view class="header_tip">吃瓜群众在哪里？</view>
+          <view class="header_title">便民信息</view>
+          <view class="header_tip">方便你我他</view>
           <img class="img" src="@/static/png/chigua.png" alt="" />
         </view>
       </view>
@@ -71,7 +71,8 @@
         </swiper-item>
       </swiper>
     </uni-swiper-dot> -->
-    <uni-grid class="icons" :column="4" :showBorder="false" :square="false">
+
+    <!-- <uni-grid class="icons" :column="4" :showBorder="false" :square="false">
       <uni-grid-item>
         <view class="icon">
           <image class="img_icon" src="@/static/png/task.png" />
@@ -108,7 +109,21 @@
           <view>闲置互换</view>
         </view>
       </uni-grid-item>
-    </uni-grid>
+    </uni-grid> -->
+
+    <scroll-view class="classify_box" scroll-x>
+      <view class="classify">
+        <view
+          v-for="(item, index) in classifyList"
+          :key="index"
+          :class="['item', currentIndex === index ? 'active' : '']"
+          @click="switchClassify(index)"
+        >
+          {{ item }}
+        </view>
+      </view>
+    </scroll-view>
+
     <scroll-view scroll-y>
       <view
         class="scroll_item"
@@ -165,6 +180,19 @@ export default {
     return {
       value: "",
       title: "Hello",
+      currentIndex: 0, // 默认选中第一个
+      classifyList: [
+        "全部",
+        "代买菜",
+        "娃娃接送",
+        "公园野营",
+        "上班拼车",
+        "二手交易",
+        "娃娃接送",
+        "公园野营",
+        "上班拼车",
+        "二手交易",
+      ], // 分类列表
       hotList: [
         {
           name: "代买菜",
@@ -251,6 +279,9 @@ export default {
         url: pagePath,
       });
     },
+    switchClassify(index) {
+      this.currentIndex = index;
+    },
     goDetail(type) {
       uni.navigateTo({
         url: `/pages/${type}/index`,
@@ -289,7 +320,7 @@ export default {
     justify-content: space-between;
     overflow: hidden;
     // background-color: #56e0e0;
-    background-color: rgb(153, 255, 255, 0.5);
+    background-color: #ccffff;
     .header_content {
       width: 100%;
     }
@@ -497,15 +528,42 @@ export default {
       }
     }
   }
+  .classify_box {
+    width: 100%;
+    white-space: nowrap;
+    background-color: #fff;
+    // font-size: 12px;
+    font-weight: 500;
+    .classify {
+      width: 100%;
+      // height: 30px;
+      display: inline-block;
+      // align-items: center;
+      background-color: #fff;
+      padding: 10px;
+      overflow-y: scroll;
+      .item {
+        margin-right: 10px;
+        display: inline-block;
+        color: #999;
+      }
+      .active {
+        font-weight: bold;
+        color: #56e0e0;
+        padding: 0 5px;
+        border-bottom: 3px solid #56e0e0;
+      }
+    }
+  }
 }
 
 .scroll_item {
   // color: #fff;
   background-color: #fff;
-  margin: 10px;
+  margin: 0 10px 20px 10px;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   .scroll_title {
     font-size: 16px;
     margin-bottom: 10px;
