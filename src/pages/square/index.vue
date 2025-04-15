@@ -18,6 +18,7 @@
         class="waterfall-item"
         v-for="(item, index) in filterList"
         :key="index"
+        @click="goDetail(item)"
       >
         <image class="img" :src="item.img" mode="widthFix"></image>
         <view class="title">{{ item.title }}</view>
@@ -123,6 +124,11 @@ export default {
         return item.classify === this.classifyList[index].value;
       });
     },
+    goDetail(item) {
+      uni.navigateTo({
+        url: `/pages/square/components/detail`,
+      });
+    },
   },
 };
 </script>
@@ -144,13 +150,9 @@ export default {
     background-color: #fff;
     font-size: 12px;
     .classify {
-      width: 100%;
-      // height: 30px;
       display: inline-block;
-      // align-items: center;
       background-color: #fff;
       padding: 6px;
-      overflow-y: scroll;
       .item {
         margin-right: 10px;
         display: inline-block;

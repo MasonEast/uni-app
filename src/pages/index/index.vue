@@ -44,15 +44,14 @@
           <img class="chat_img" src="@/static/png/liaotian.png" alt="" />
           <img class="happy_img" src="@/static/png/kaixin.png" alt="" />
         </view>
-
-        <view class="hall">
-          <view class="header_title">吃瓜现场</view>
-          <view class="header_tip">吃瓜群众在哪里？</view>
-          <img class="img" src="@/static/png/chigua.png" alt="" />
-        </view>
         <view class="hole">
           <view class="header_title">便民信息</view>
           <view class="header_tip">方便你我他</view>
+          <img class="img" src="@/static/png/gonggaozhidu.png" alt="" />
+        </view>
+        <view class="hall">
+          <view class="header_title">吃瓜现场</view>
+          <view class="header_tip">吃瓜群众在哪里？</view>
           <img class="img" src="@/static/png/chigua.png" alt="" />
         </view>
       </view>
@@ -311,7 +310,7 @@ export default {
 
 .home {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: #f5f7fa;
   box-sizing: border-box;
   .header {
@@ -535,13 +534,11 @@ export default {
     // font-size: 12px;
     font-weight: 500;
     .classify {
-      width: 100%;
       // height: 30px;
       display: inline-block;
       // align-items: center;
       background-color: #fff;
       padding: 10px;
-      overflow-y: scroll;
       .item {
         margin-right: 10px;
         display: inline-block;
@@ -560,7 +557,7 @@ export default {
 .scroll_item {
   // color: #fff;
   background-color: #fff;
-  margin: 0 10px 20px 10px;
+  margin: 10px;
   padding: 20px;
   border-radius: 10px;
   // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
