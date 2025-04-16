@@ -49,6 +49,12 @@
       }
     },
     {
+      "path": "pages/user/components/login",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/user/components/set",
       "style": {
         "navigationBarTitleText": "设置"

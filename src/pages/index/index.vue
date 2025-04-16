@@ -269,7 +269,20 @@ export default {
     };
   },
   onLoad() {
-    this.currentPage = "/" + options.__route__.split("/").pop();
+    // this.currentPage = "/" + options.__route__.split("/").pop();
+    uni.request({
+      url: "http://localhost:3000", //仅为示例，并非真实接口地址。
+      data: {
+        text: "uni.request",
+      },
+      header: {
+        "custom-header": "hello", //自定义请求头信息
+      },
+      success: (res) => {
+        console.log(res.data);
+        this.value = "request success";
+      },
+    });
   },
   methods: {
     handleTabChange(pagePath) {
