@@ -46,93 +46,12 @@ export default {
   },
   onLoad() {
     // 在uni-app的页面或组件中
-    uni.login({
-      provider: "weixin",
-      success: async (loginRes) => {
-        // 获取到code
-        const code = loginRes.code;
-        console.log(loginRes, "----code");
-        // 将code发送到你的Koa后端
-        try {
-          const res = await uni.request({
-            url: "http://localhost:3000/api/wx-login",
-            method: "POST",
-            data: { code },
-            header: {
-              "Content-Type": "application/json",
-            },
-          });
-          console.log(res, "--------res");
-          // 处理登录结果
-          if (res[1].statusCode === 200) {
-            // 登录成功，保存token等
-            const { token, userInfo } = res[1].data;
-            uni.setStorageSync("token", token);
-            uni.setStorageSync("userInfo", userInfo);
-
-            // 跳转到首页或其他页面
-            uni.reLaunch({
-              url: "/pages/index/index",
-            });
-          }
-        } catch (error) {
-          console.error("登录失败:", error);
-        }
-      },
-      fail: (err) => {
-        console.error("微信登录失败:", err);
-      },
-    });
   },
   methods: {
     login() {
       uni.navigateTo({
         url: `/pages/user/components/login`,
       });
-    },
-
-    onGetUserInfo(e) {
-      if (e.detail.userInfo) {
-        // 用户允许授权
-        const userInfo = e.detail.userInfo;
-        console.log("用户信息:", userInfo);
-
-        // 保存到本地
-        uni.setStorageSync("userInfo", userInfo);
-
-        // 发送到服务器
-        this.sendUserInfoToServer(userInfo);
-      } else {
-        // 用户拒绝授权
-        uni.showToast({
-          title: "您拒绝了授权",
-          icon: "none",
-        });
-      }
-    },
-
-    async sendUserInfoToServer(userInfo) {
-      try {
-        const token = uni.getStorageSync("token");
-        const res = await uni.request({
-          url: "http://localhost:3000/api/update-user-info",
-          method: "POST",
-          data: { userInfo },
-          header: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (res[1].statusCode === 200) {
-          uni.showToast({
-            title: "信息更新成功",
-            icon: "success",
-          });
-        }
-      } catch (error) {
-        console.error("更新用户信息失败:", error);
-      }
     },
   },
 };

@@ -14,12 +14,15 @@
       ></image>
     </view>
     <view class="content">
-      <button
+      <!-- <button
         class="btn"
         open-type="getPhoneNumber"
-        @getphonenumber="onGetPhoneNumber"
+        @getphonenumber="handleGetPhoneNumber"
       >
         手机号登录
+      </button> -->
+      <button class="btn" open-type="getUserInfo" @getuserinfo="onGetUserInfo">
+        微信登录
       </button>
       <view class="agreement">登录即代表同意《用户协议》、《隐私政策》</view>
     </view>
@@ -36,54 +39,143 @@ export default {
   },
   onLoad() {},
   methods: {
-    async onGetPhoneNumber(e) {
-      if (e.detail.errMsg === "getPhoneNumber:ok") {
-        // 获取到加密数据
-        const { encryptedData, iv } = e.detail;
-
-        // 获取当前登录的code（可能需要）
-        const loginRes = await uni.login({
-          provider: "weixin",
-        });
-        const code = loginRes.code;
-
-        // 发送到服务器解密
-        try {
-          const token = uni.getStorageSync("token");
-          const res = await uni.request({
-            url: "https://your-koa-server.com/api/get-phone-number",
-            method: "POST",
-            data: { encryptedData, iv, code },
-            header: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          if (res[1].statusCode === 200) {
-            const phoneNumber = res[1].data.phoneNumber;
-            console.log("解密后的手机号:", phoneNumber);
-
-            // 保存手机号
-            uni.setStorageSync("phoneNumber", phoneNumber);
-
-            // 可以更新服务器上的用户信息
-            this.updateUserPhoneNumber(phoneNumber);
-          }
-        } catch (error) {
-          console.error("获取手机号失败:", error);
-        }
-      } else {
-        // 用户拒绝或失败
+    async handleGetPhoneNumber(e) {
+      if (e.detail.errMsg !== "getPhoneNumber:ok") {
         uni.showToast({
           title: "获取手机号失败",
+          icon: "none",
+        });
+        return;
+      }
+
+      try {
+        // 获取微信登录code
+        const loginRes = await uni.login({ provider: "weixin" });
+
+        // 发送加密数据到服务器
+        const res = await uni.request({
+          url: "http://localhost:3000/api/phone-login",
+          method: "POST",
+          data: {
+            code: loginRes.code, // 微信登录code
+            encryptedData: e.detail.encryptedData, // 加密数据
+            iv: e.detail.iv, // 加密算法的初始向量
+          },
+          header: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (res[1].statusCode === 200) {
+          // 登录成功处理
+          const { token, userInfo } = res[1].data;
+          uni.setStorageSync("token", token);
+          uni.setStorageSync("userInfo", userInfo);
+
+          uni.showToast({
+            title: "登录成功",
+            icon: "success",
+          });
+
+          // 跳转到首页
+          uni.reLaunch({
+            url: "/pages/index/index",
+          });
+        } else {
+          throw new Error(res[1].data.message || "登录失败");
+        }
+      } catch (error) {
+        console.error("手机号登录失败:", error);
+        uni.showToast({
+          title: error.message,
           icon: "none",
         });
       }
     },
 
-    async updateUserPhoneNumber(phoneNumber) {
-      // 实现更新逻辑...
+    async login() {
+      uni.login({
+        provider: "weixin",
+        success: async (loginRes) => {
+          // 获取到code
+          const code = loginRes.code;
+          console.log(loginRes, "----code");
+          // 将code发送到你的Koa后端
+          try {
+            const res = await uni.request({
+              url: "http://localhost:3000/api/wx-login",
+              method: "POST",
+              data: { code },
+              header: {
+                "Content-Type": "application/json",
+              },
+            });
+            console.log(res, "--------res");
+            // 处理登录结果
+            if (res.statusCode === 200) {
+              // 登录成功，保存token等
+              const { token, userInfo } = res.data;
+              uni.setStorageSync("token", token);
+              uni.setStorageSync("userInfo", userInfo);
+
+              // 跳转到首页或其他页面
+              uni.reLaunch({
+                url: "/pages/index/index",
+              });
+            }
+          } catch (error) {
+            console.error("登录失败:", error);
+          }
+        },
+        fail: (err) => {
+          console.error("微信登录失败:", err);
+        },
+      });
+    },
+
+    async onGetUserInfo(e) {
+      if (e.detail.userInfo) {
+        // 用户允许授权
+        const userInfo = e.detail.userInfo;
+        console.log("用户信息:", userInfo);
+
+        // 保存到本地
+        uni.setStorageSync("userInfo", userInfo);
+        await this.login();
+        // 发送到服务器
+        await this.sendUserInfoToServer(userInfo);
+      } else {
+        // 用户拒绝授权
+        uni.showToast({
+          title: "您拒绝了授权",
+          icon: "none",
+        });
+      }
+    },
+
+    async sendUserInfoToServer(userInfo) {
+      try {
+        const token = uni.getStorageSync("token");
+        console.log("token:--------", token);
+        const res = await uni.request({
+          url: "http://localhost:3000/api/update-user-info",
+          method: "POST",
+          data: { userInfo },
+          header: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (res.statusCode === 200) {
+          uni.showToast({
+            title: "登录成功",
+            icon: "success",
+          });
+        }
+      } catch (error) {
+        console.error("登录失败:", error);
+      }
     },
   },
 };
