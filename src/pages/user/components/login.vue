@@ -1,4 +1,5 @@
 <template>
+  <uni-icons class="back_icon" type="left" size="30" @click="back"></uni-icons>
   <view class="login_detail">
     <image
       class="bg-image"
@@ -39,6 +40,11 @@ export default {
   },
   onLoad() {},
   methods: {
+    back() {
+      uni.switchTab({
+        url: `/pages/user/user`,
+      });
+    },
     async handleGetPhoneNumber(e) {
       if (e.detail.errMsg !== "getPhoneNumber:ok") {
         uni.showToast({
@@ -93,7 +99,24 @@ export default {
       }
     },
 
-    async login() {
+    async onGetUserInfo(e) {
+      const userInfo = e.detail.userInfo;
+      if (userInfo) {
+        // 用户允许授权
+        console.log("用户信息:", userInfo);
+
+        // 保存到本地
+        uni.setStorageSync("userInfo", userInfo);
+        // 发送到服务器
+        // await this.sendUserInfoToServer(userInfo);
+      } else {
+        // 用户拒绝授权
+        uni.showToast({
+          title: "您拒绝了授权",
+          icon: "none",
+        });
+      }
+
       uni.login({
         provider: "weixin",
         success: async (loginRes) => {
@@ -105,7 +128,7 @@ export default {
             const res = await uni.request({
               url: "http://localhost:3000/api/wx-login",
               method: "POST",
-              data: { code },
+              data: { code, userInfo },
               header: {
                 "Content-Type": "application/json",
               },
@@ -133,25 +156,25 @@ export default {
       });
     },
 
-    async onGetUserInfo(e) {
-      if (e.detail.userInfo) {
-        // 用户允许授权
-        const userInfo = e.detail.userInfo;
-        console.log("用户信息:", userInfo);
+    // async onGetUserInfo(e) {
+    //   if (e.detail.userInfo) {
+    //     // 用户允许授权
+    //     const userInfo = e.detail.userInfo;
+    //     console.log("用户信息:", userInfo);
 
-        // 保存到本地
-        uni.setStorageSync("userInfo", userInfo);
-        await this.login();
-        // 发送到服务器
-        await this.sendUserInfoToServer(userInfo);
-      } else {
-        // 用户拒绝授权
-        uni.showToast({
-          title: "您拒绝了授权",
-          icon: "none",
-        });
-      }
-    },
+    //     // 保存到本地
+    //     uni.setStorageSync("userInfo", userInfo);
+    //     await this.login();
+    //     // 发送到服务器
+    //     await this.sendUserInfoToServer(userInfo);
+    //   } else {
+    //     // 用户拒绝授权
+    //     uni.showToast({
+    //       title: "您拒绝了授权",
+    //       icon: "none",
+    //     });
+    //   }
+    // },
 
     async sendUserInfoToServer(userInfo) {
       try {
@@ -174,6 +197,10 @@ export default {
           });
         }
       } catch (error) {
+        uni.showToast({
+          title: error.errMsg || "登录失败",
+          icon: "error",
+        });
         console.error("登录失败:", error);
       }
     },
@@ -184,6 +211,13 @@ export default {
 <style lang="scss" scoped>
 @use "variables";
 @use "mixins";
+
+.back_icon {
+  position: absolute;
+  left: 8px;
+  top: 50px;
+  font-weight: bold;
+}
 
 .login_detail {
   width: 100%;

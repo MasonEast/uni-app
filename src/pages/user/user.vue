@@ -5,14 +5,19 @@
     </view>
     <view class="header">
       <view class="card">
-        <view class="img-box">
-          <img class="img" src="/static/img/1.jpg" alt="" />
+        <view v-if="token" class="img-box">
+          <img class="img" :src="userInfo.avatarUrl" alt="" />
           <view class="desc">
-            <view class="title">东方石匠</view>
+            <view class="title">{{ userInfo.nickName }}</view>
             <view class="id">ID: 123456</view>
           </view>
         </view>
-
+        <view v-else class="img-box">
+          <img class="img" src="/static/png/user.png" alt="" />
+          <view class="desc">
+            <view class="login" @click="login">登录/注册</view>
+          </view>
+        </view>
         <view class="btn-box">
           <view class="left">
             <img class="img" src="/static/png/qizhi.png" alt="" />
@@ -27,12 +32,6 @@
         </view>
       </view>
     </view>
-
-    <!-- 在登录页面添加获取用户信息的按钮 -->
-    <button open-type="getUserInfo" @getuserinfo="onGetUserInfo">
-      获取用户信息
-    </button>
-    <button @click="login">登录/注册</button>
   </view>
 </template>
 
@@ -40,17 +39,27 @@
 export default {
   data() {
     return {
-      value: "",
+      token: "",
+      userInfo: "",
       title: "Hello",
     };
   },
   onLoad() {
     // 在uni-app的页面或组件中
   },
+  mounted() {
+    this.token = uni.getStorageSync("token");
+    this.userInfo = uni.getStorageSync("userInfo");
+  },
   methods: {
     login() {
       uni.navigateTo({
         url: `/pages/user/components/login`,
+      });
+    },
+    goSet() {
+      uni.navigateTo({
+        url: `/pages/user/components/set`,
       });
     },
   },
@@ -117,6 +126,11 @@ export default {
           .id {
             font-size: 10px;
             color: #999;
+          }
+          .login {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
           }
         }
       }

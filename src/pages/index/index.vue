@@ -110,7 +110,12 @@
       </uni-grid-item>
     </uni-grid> -->
 
-    <scroll-view class="classify_box" scroll-x>
+    <scroll-view
+      class="classify_box"
+      scroll-x
+      :show-scrollbar="false"
+      :scroll-with-animation="true"
+    >
       <view class="classify">
         <view
           v-for="(item, index) in classifyList"
@@ -544,8 +549,11 @@ export default {
     width: 100%;
     white-space: nowrap;
     background-color: #fff;
+    ::-webkit-scrollbar {
+      display: none;
+    }
     // font-size: 12px;
-    font-weight: 500;
+    // font-weight: 500;
     .classify {
       // height: 30px;
       display: inline-block;
@@ -556,9 +564,10 @@ export default {
         margin-right: 10px;
         display: inline-block;
         color: #999;
+        font-size: 14px;
       }
       .active {
-        font-weight: bold;
+        // font-weight: bold;
         color: #56e0e0;
         padding: 0 5px;
         border-bottom: 3px solid #56e0e0;
@@ -570,6 +579,7 @@ export default {
 .scroll_item {
   // color: #fff;
   background-color: #fff;
+  // margin: 0 10px 20px 10px;
   margin: 10px;
   padding: 20px;
   border-radius: 10px;

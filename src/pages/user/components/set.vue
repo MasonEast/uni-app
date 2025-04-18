@@ -28,11 +28,23 @@ export default {
   },
   onLoad() {},
   methods: {
+    login() {
+      uni.navigateTo({
+        url: `/pages/user/components/login`,
+      });
+    },
     logout() {
       this.$refs.alertDialog.open();
     },
     dialogConfirm() {
       this.$refs.alertDialog.close();
+      uni.clearStorageSync("token");
+      uni.clearStorageSync("userInfo");
+      uni.showToast({
+        title: "退出登录成功",
+        icon: "none",
+      });
+      this.login();
     },
     dialogClose() {
       this.$refs.alertDialog.close();
