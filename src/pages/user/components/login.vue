@@ -121,27 +121,17 @@ export default {
           console.log(loginRes, "----code");
           // 将code发送到你的Koa后端
           try {
-            const res = await uni.request({
-              url: "http://localhost:3000/api/wx-login",
-              method: "POST",
-              data: { code, userInfo },
-              header: {
-                "Content-Type": "application/json",
-              },
-            });
+            const res = await this.$api.user.login({ code, userInfo });
             console.log(res, "--------res");
-            // 处理登录结果
-            if (res.statusCode === 200) {
-              // 登录成功，保存token等
-              const { token, userInfo } = res.data;
-              uni.setStorageSync("token", token);
-              uni.setStorageSync("userInfo", userInfo);
 
-              // 跳转到首页或其他页面
-              uni.reLaunch({
-                url: "/pages/index/index",
-              });
-            }
+            const { token, userInfo } = res;
+            uni.setStorageSync("token", token);
+            uni.setStorageSync("userInfo", userInfo);
+
+            // 跳转到首页或其他页面
+            uni.reLaunch({
+              url: "/pages/index/index",
+            });
           } catch (error) {
             console.error("登录失败:", error);
           }

@@ -1,10 +1,17 @@
 import { createSSRApp } from "vue";
 import App from "./App.vue";
-
+import api from "./api";
 import uView from "uview-ui";
 
 export function createApp() {
   const app = createSSRApp(App);
+
+  app.config.globalProperties.$api = api;
+
+  // 如果需要同时在 uni 对象上挂载（客户端）
+  if (typeof window !== "undefined") {
+    uni.$api = api;
+  }
   //   app.use(uView);
   return {
     app,
