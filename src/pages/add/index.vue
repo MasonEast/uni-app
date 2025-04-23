@@ -26,7 +26,7 @@
       <view class="title">
         <uni-file-picker limit="9" title="最多选择9张图片"></uni-file-picker>
       </view>
-      <view>
+      <view class="title_input">
         <uni-easyinput
           v-model="title"
           :inputBorder="false"
@@ -39,16 +39,27 @@
       <view>
         <uni-easyinput
           type="textarea"
-          v-model="value"
+          v-model="content"
           :inputBorder="false"
           placeholder="请描述活动内容、亮点，吸引大家参加吧~"
         ></uni-easyinput>
       </view>
       <view class="button_group" style="width: 100%">
-        <view class="button color_g" style="width: 85px" @click="openLocation">
+        <!-- <view class="button color_g" style="width: 85px" @click="openLocation">
           <uni-icons class="icon" type="location-filled" size="15"></uni-icons>
           <view>选择地点</view>
           <uni-icons class="icon icon_right" type="right" size="15"></uni-icons>
+       
+        </view> -->
+        <view class="location_input color_g" style="width: 200px">
+          <uni-icons class="icon" type="location-filled" size="15"></uni-icons>
+          <uni-easyinput
+            v-model="location"
+            :inputBorder="false"
+            styles="font-size: 10px; color: #999"
+            placeholderStyle="color:#999; font-size:10px"
+            placeholder="请填写集合地点"
+          ></uni-easyinput>
         </view>
         <view
           class="button color_g"
@@ -83,8 +94,9 @@
           </view>
         </view>
       </uni-popup>
+
       <uni-popup ref="timePopup" type="bottom" border-radius="10px 10px 0 0">
-        <view class="example-body">
+        <view class="time_popup">
           <uni-datetime-picker
             v-model="datetimerange"
             type="datetimerange"
@@ -132,6 +144,9 @@ export default {
   data() {
     return {
       title: "",
+      content: "",
+      location: "",
+      time: "",
       value: "",
       datetimerange: [],
       range: [
@@ -152,6 +167,9 @@ export default {
     },
   },
   onLoad() {},
+  async mounted() {
+    this.range = await this.$api.dict.getDictOptions("activityType");
+  },
   methods: {
     openLocation() {
       this.$refs.locationPopup.open();
@@ -229,7 +247,7 @@ export default {
 .button {
   width: 120px;
   height: 25px;
-  font-size: 10px;
+
   border: 1px solid #f5f7fa;
   border-radius: 25px;
   display: flex;
@@ -237,12 +255,17 @@ export default {
   align-items: center;
   margin-bottom: 10px;
   margin-right: 10px;
+}
+.location_input {
+  display: flex;
+  align-items: center;
+}
+.color_g {
+  font-size: 10px;
+  color: #999;
   .icon {
     margin-right: 5px;
   }
-}
-.color_g {
-  color: #999;
   .icon_right {
     margin-left: 5px;
     margin-top: 3px;
@@ -275,8 +298,17 @@ export default {
 :deep(.uni-select) {
   border: none;
 }
-:deep(.uni-easyinput__content-input) {
+.title_input :deep(.uni-easyinput__content-input) {
   font-size: 18px;
   padding: 0 !important;
+}
+
+.location_input :deep(.uni-easyinput__content-input) {
+  font-size: 10px;
+  padding: 0 !important;
+}
+
+.time_popup {
+  height: 170px;
 }
 </style>

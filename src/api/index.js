@@ -9,6 +9,10 @@ export default {
     updateInfo: (data) => put("/user/info", data),
   },
 
+  dict: {
+    getDictOptions: (dictName) => get(`/dict/${dictName}`),
+  },
+
   // 商品相关
   product: {
     list: (params) => get("/product/list", { params }),
