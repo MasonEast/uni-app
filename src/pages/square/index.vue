@@ -74,7 +74,7 @@ export default {
           classify: "info",
         },
         {
-          img: "/static/img/5.jpg",
+          img: "/static/img/1.jpg",
           title: "运动不能停，学了三节课的腹式呼吸",
           avatar: "/static/img/1.jpg",
           name: "心爱的姑娘",
@@ -102,7 +102,7 @@ export default {
           like: 0,
         },
         {
-          img: "/static/img/5.jpg",
+          img: "/static/img/1.jpg",
           title: "运动不能停，学了三节课的腹式呼吸",
           avatar: "/static/img/1.jpg",
           name: "心爱的姑娘",

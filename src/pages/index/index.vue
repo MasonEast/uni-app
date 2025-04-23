@@ -215,10 +215,10 @@ export default {
         },
       ],
       momentList: [
-        "/static/img/5.jpg",
-        "/static/img/6.jpg",
-        "/static/img/7.jpg",
-        "/static/img/8.jpg",
+        "/static/img/1.jpg",
+        "/static/img/1.jpg",
+        "/static/img/1.jpg",
+        "/static/img/1.jpg",
       ],
       info: [
         {

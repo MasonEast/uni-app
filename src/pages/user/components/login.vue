@@ -1,11 +1,7 @@
 <template>
   <uni-icons class="back_icon" type="left" size="30" @click="back"></uni-icons>
   <view class="login_detail">
-    <image
-      class="bg-image"
-      src="@/static/img/login_bg.jpg"
-      mode="aspectFill"
-    ></image>
+    <image class="bg-image" src="@/static/img/1.jpg" mode="aspectFill"></image>
     <view>
       <image
         class="logo-image"
