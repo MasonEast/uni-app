@@ -162,10 +162,44 @@ export const del = (url, data = {}, options = {}) => {
   });
 };
 
+export const upload = (url, file = {}, formData = {}) => {
+  return new Promise((resolve, reject) => {
+    console.log(url, file, formData, "------upload");
+    uni.uploadFile({
+      url: `${BASE_URL}${url}`,
+      filePath: file.path, // 文件临时路径
+      name: "file", // 后端接收的字段名
+      formData, // 附加参数
+      header: {
+        "Content-Type": "multipart/form-data",
+      },
+      success: (res) => {
+        if (res.code === 200) {
+          // 尝试解析返回数据（通常后端返回JSON字符串）
+          try {
+            console.log(res.data);
+            resolve(JSON.parse(res.data));
+            uni.showToast({ title: "上传成功" });
+          } catch (e) {
+            resolve(res.data);
+          }
+        } else {
+          uni.showToast({ title: "上传失败" });
+          reject(new Error(`上传失败: ${res.errMsg}`));
+        }
+      },
+      fail: (err) => {
+        reject(new Error(`网络错误: ${err.errMsg}`));
+      },
+    });
+  });
+};
+
 export default {
   request,
   get,
   post,
   put,
   delete: del,
+  upload,
 };

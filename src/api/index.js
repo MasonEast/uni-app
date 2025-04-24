@@ -1,5 +1,5 @@
 // api/index.js
-import { get, post, put, del } from "@/utils/request";
+import { get, post, put, del, upload } from "@/utils/request";
 
 export default {
   // 用户相关
@@ -25,5 +25,9 @@ export default {
     create: (data) => post("/order/create", data),
     list: (params) => get("/order/list", { params }),
     cancel: (id) => del(`/order/cancel/${id}`),
+  },
+
+  upload: {
+    uploadImg: (files, formData) => upload("/upload/image", files, formData),
   },
 };

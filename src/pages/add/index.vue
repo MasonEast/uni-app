@@ -24,7 +24,14 @@
       </view>
 
       <view class="title">
-        <uni-file-picker limit="9" title="最多选择9张图片"></uni-file-picker>
+        <uni-file-picker
+          limit="9"
+          title="最多选择9张图片"
+          v-model="imgList"
+          @select="handleImgSelect"
+          @success="handleUploadSuccess"
+          :auto-upload="false"
+        ></uni-file-picker>
       </view>
       <view class="title_input">
         <uni-easyinput
@@ -44,14 +51,14 @@
           placeholder="请描述活动内容、亮点，吸引大家参加吧~"
         ></uni-easyinput>
       </view>
-      <view class="button_group" style="width: 100%">
+      <view class="" style="width: 100%">
         <!-- <view class="button color_g" style="width: 85px" @click="openLocation">
           <uni-icons class="icon" type="location-filled" size="15"></uni-icons>
           <view>选择地点</view>
           <uni-icons class="icon icon_right" type="right" size="15"></uni-icons>
        
         </view> -->
-        <view class="location_input color_g" style="width: 200px">
+        <view class="location_input color_g">
           <uni-icons class="icon" type="location-filled" size="15"></uni-icons>
           <uni-easyinput
             v-model="location"
@@ -63,8 +70,8 @@
         </view>
         <view
           class="button color_g"
-          :style="{ width: datetimerange.length ? '260px' : '110px' }"
           @click="openTime"
+          :style="datetimerange.length ? 'width: 280px' : 'width: 120px'"
         >
           <uni-icons
             class="icon"
@@ -132,7 +139,7 @@
     <view
       class="button btn_submit"
       style="width: calc(100% - 125px)"
-      @click="openLocation"
+      @click="handleSubmit"
     >
       <view>发布</view>
     </view>
@@ -143,12 +150,15 @@
 export default {
   data() {
     return {
+      type: "",
       title: "",
       content: "",
       location: "",
       time: "",
       value: "",
       datetimerange: [],
+      imgList: [],
+      tempFiles: [],
       range: [
         { value: 0, text: "找搭子" },
         { value: 1, text: "接送娃娃" },
@@ -178,12 +188,36 @@ export default {
       this.$refs.timePopup.open();
     },
     change(e) {
-      console.log("输入内容：", e);
+      this.type = e;
     },
     change1(type) {
       uni.showToast({
         title: `点击了${type === "prefix" ? "左侧" : "右侧"}的图标`,
         icon: "none",
+      });
+    },
+    async handleImgSelect(e) {
+      console.log("选择的文件", e);
+      this.tempFiles = e.tempFiles;
+      await this.$api.upload.uploadImg(e.tempFiles[0].file);
+    },
+    handleUploadSuccess(e) {
+      console.log("上传成功", e);
+      // e.tempFilePaths 是上传后的临时路径（H5端可能不同）
+      const tempFilePath = e.tempFilePaths[0]; // 取第一个文件
+      this.fileList.push({
+        name: e.tempFiles[0].name,
+        url: tempFilePath,
+      });
+    },
+    handleSubmit() {
+      console.log("提交", this.imgList);
+      this.$api.activity.add({
+        title: this.title,
+        content: this.content,
+        location: this.location,
+        time: this.datetimerange,
+        type: this.type,
       });
     },
   },
@@ -259,6 +293,7 @@ export default {
 .location_input {
   display: flex;
   align-items: center;
+  margin-left: 8px;
 }
 .color_g {
   font-size: 10px;
