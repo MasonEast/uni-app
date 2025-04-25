@@ -164,7 +164,6 @@ export const del = (url, data = {}, options = {}) => {
 
 export const upload = (url, file = {}, formData = {}) => {
   return new Promise((resolve, reject) => {
-    console.log(url, file, formData, "------upload");
     uni.uploadFile({
       url: `${BASE_URL}${url}`,
       filePath: file.path, // 文件临时路径
@@ -195,6 +194,30 @@ export const upload = (url, file = {}, formData = {}) => {
   });
 };
 
+export const uploadBatch = (url, files = [], formData = {}) => {
+  const uploadTasks = files.map((file, index) => {
+    console.log(url, file, formData, "------upload");
+
+    return new Promise((resolve, reject) => {
+      uni.uploadFile({
+        url: `${BASE_URL}${url}`,
+        filePath: file.path,
+        name: "file",
+        success: resolve,
+        fail: reject,
+      });
+    });
+  });
+
+  return Promise.all(uploadTasks)
+    .then((results) => {
+      console.log("所有文件上传成功", results);
+    })
+    .catch((err) => {
+      console.error("部分文件上传失败", err);
+    });
+};
+
 export default {
   request,
   get,
@@ -202,4 +225,5 @@ export default {
   put,
   delete: del,
   upload,
+  uploadBatch,
 };

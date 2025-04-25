@@ -30,6 +30,7 @@
           v-model="imgList"
           @select="handleImgSelect"
           @success="handleUploadSuccess"
+          @delete="handleImgDelete"
           :auto-upload="false"
         ></uni-file-picker>
       </view>
@@ -117,7 +118,7 @@
       <view class="contact_item">
         <view class="contact_name">微信号</view>
         <uni-easyinput
-          v-model="value"
+          v-model="weixin"
           :inputBorder="false"
           placeholder="请输入微信号"
         />
@@ -125,7 +126,7 @@
       <view class="contact_item">
         <view class="contact_name">手机号</view>
         <uni-easyinput
-          v-model="value"
+          v-model="phone"
           :inputBorder="false"
           placeholder="请输入手机号"
         />
@@ -155,7 +156,8 @@ export default {
       content: "",
       location: "",
       time: "",
-      value: "",
+      weixin: "",
+      phone: "",
       datetimerange: [],
       imgList: [],
       tempFiles: [],
@@ -198,9 +200,14 @@ export default {
     },
     async handleImgSelect(e) {
       console.log("选择的文件", e);
-      this.tempFiles = e.tempFiles;
-      await this.$api.upload.uploadImg(e.tempFiles[0].file);
+      this.tempFiles.push(...e.tempFiles);
+      // await this.$api.upload.uploadImg(e.tempFiles[0].file);
     },
+    handleImgDelete(e) {
+      console.log("删除的文件", e);
+      this.tempFiles.splice(e.index, 1);
+    },
+
     handleUploadSuccess(e) {
       console.log("上传成功", e);
       // e.tempFilePaths 是上传后的临时路径（H5端可能不同）
@@ -210,14 +217,27 @@ export default {
         url: tempFilePath,
       });
     },
-    handleSubmit() {
-      console.log("提交", this.imgList);
-      this.$api.activity.add({
+    async handleSubmit() {
+      console.log(
+        "提交",
+        // this.title,
+        // this.content,
+        // this.location,
+        // this.datetimerange,
+        // this.type,
+        this.tempFiles
+      );
+      const res = await this.$api.upload.uploadBatch(this.tempFiles);
+      console.log("上传成功", res);
+
+      this.$api.activity.create({
         title: this.title,
         content: this.content,
         location: this.location,
         time: this.datetimerange,
         type: this.type,
+        weixin: this.weixin,
+        phone: this.phone,
       });
     },
   },

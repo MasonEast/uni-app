@@ -1,5 +1,5 @@
 // api/index.js
-import { get, post, put, del, upload } from "@/utils/request";
+import { get, post, put, del, upload, uploadBatch } from "@/utils/request";
 
 export default {
   // 用户相关
@@ -14,10 +14,10 @@ export default {
   },
 
   // 商品相关
-  product: {
-    list: (params) => get("/product/list", { params }),
-    detail: (id) => get(`/product/detail/${id}`),
-    create: (data) => post("/product/create", data),
+  activity: {
+    list: (params) => get("/activity/list", { params }),
+    detail: (id) => get(`/activity/detail/${id}`),
+    create: (data) => post("/activity/create", data),
   },
 
   // 订单相关
@@ -28,6 +28,8 @@ export default {
   },
 
   upload: {
-    uploadImg: (files, formData) => upload("/upload/image", files, formData),
+    uploadFile: (files, formData) => upload("/upload/file", files, formData),
+    uploadBatch: (files, formData) =>
+      uploadBatch("/upload/file", files, formData),
   },
 };
