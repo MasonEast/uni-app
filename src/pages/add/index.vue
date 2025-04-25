@@ -227,18 +227,27 @@ export default {
         // this.type,
         this.tempFiles
       );
-      const res = await this.$api.upload.uploadBatch(this.tempFiles);
-      console.log("上传成功", res);
+      const imgs = await this.$api.upload.uploadBatch(this.tempFiles);
+      console.log("上传成功", imgs);
 
-      this.$api.activity.create({
+      const res = this.$api.activity.create({
         title: this.title,
         content: this.content,
         location: this.location,
-        time: this.datetimerange,
+        datetimerange: this.datetimerange,
         type: this.type,
         weixin: this.weixin,
         phone: this.phone,
+        images: imgs.map((item) => item.data?.id),
       });
+
+      if (res.code === 200) {
+        uni.showToast({
+          title: "发布成功",
+          icon: "success",
+        });
+        uni.switchTab({ url: "/pages/index/index" });
+      }
     },
   },
 };

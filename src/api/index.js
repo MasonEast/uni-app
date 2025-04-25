@@ -15,9 +15,9 @@ export default {
 
   // 商品相关
   activity: {
-    list: (params) => get("/activity/list", { params }),
-    detail: (id) => get(`/activity/detail/${id}`),
-    create: (data) => post("/activity/create", data),
+    list: (params) => get("/post/list", { params }),
+    detail: (id) => get(`/post/detail/${id}`),
+    create: (data) => post("/post/create", data),
   },
 
   // 订单相关

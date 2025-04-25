@@ -274,7 +274,27 @@ export default {
     };
   },
 
+  // async onLoad() {
+  //   const list = await this.$api.activity.list("activity/list");
+  //   console.log(list, "---------load");
+  // },
+
+  onShow() {
+    console.log("首页显示 - 请求数据");
+    this.loadData();
+  },
+
+  // async mounted() {
+  //   const list = await this.$api.activity.list("activity/list");
+  //   console.log(list, "---------list");
+  // },
+
   methods: {
+    async loadData() {
+      console.log("页面加载");
+      const list = await this.$api.activity.list("activity/list");
+      console.log(list, "---------load");
+    },
     handleTabChange(pagePath) {
       this.currentPage = pagePath;
       uni.switchTab({

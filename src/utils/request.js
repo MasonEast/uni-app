@@ -7,6 +7,7 @@ const BASE_URL = "http://localhost:3000/api";
 const requestInterceptor = (config) => {
   // 可以在这里添加 token 等全局参数
   const token = uni.getStorageSync("token");
+  console.log("token", token, config.header);
   if (token) {
     config.header = config.header || {};
     config.header["Authorization"] = `Bearer ${token}`;
@@ -212,6 +213,7 @@ export const uploadBatch = (url, files = [], formData = {}) => {
   return Promise.all(uploadTasks)
     .then((results) => {
       console.log("所有文件上传成功", results);
+      return results;
     })
     .catch((err) => {
       console.error("部分文件上传失败", err);
