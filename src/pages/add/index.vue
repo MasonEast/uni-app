@@ -9,7 +9,7 @@
       <text class="text">示例元素</text>
     </uni-transition> -->
     <view class="btn" @click="goActivity">发布活动</view>
-    <view class="btn">发布动态</view>
+    <view class="btn" @click="goDynamic">发布动态</view>
   </view>
 </template>
 
@@ -27,6 +27,11 @@ export default {
     goActivity() {
       uni.navigateTo({
         url: "/pages/add/components/activity",
+      });
+    },
+    goDynamic() {
+      uni.navigateTo({
+        url: "/pages/add/components/dynamic",
       });
     },
   },

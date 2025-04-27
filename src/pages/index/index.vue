@@ -133,7 +133,7 @@
         class="scroll_item"
         v-for="(item, index) in activityList"
         :key="index"
-        @click="goItemDetail('partner')"
+        @click="goItemDetail(item)"
       >
         <view class="scroll_title"> {{ item.title }} </view>
         <view class="scroll_content">
@@ -169,7 +169,7 @@
         <view class="img_group">
           <image
             class="scroll_img"
-            v-for="(img, index) in item.images"
+            v-for="(img, index) in item.images.slice(0, 3)"
             :key="index"
             :src="img"
           />
@@ -325,9 +325,11 @@ export default {
         url: `/pages/${type}/index`,
       });
     },
-    goItemDetail(type) {
+    goItemDetail(item) {
+      console.log("跳转到详情页", item);
       uni.navigateTo({
-        url: `/pages/${type}/components/detail`,
+        // url: `/pages/${type}/components/detail`,
+        url: `/pages/index/components/activityDetail?id=${item._id}`,
       });
     },
     change(e) {

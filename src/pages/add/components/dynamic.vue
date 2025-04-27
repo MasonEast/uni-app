@@ -1,7 +1,7 @@
 <template>
   <view class="content">
     <view class="classic card">
-      <view>*活动分类</view>
+      <view>*动态分类</view>
       <uni-data-select
         class="select"
         :clear="false"
@@ -12,7 +12,7 @@
       ></uni-data-select>
     </view>
     <view class="card">
-      <view class="button_group">
+      <!-- <view class="button_group">
         <view class="button">
           <uni-icons class="icon" type="images" size="15"></uni-icons>
           从图片库选择
@@ -21,7 +21,7 @@
           <uni-icons class="icon" type="plusempty" size="15"></uni-icons>
           使用简介模版
         </view>
-      </view>
+      </view> -->
 
       <view class="title">
         <uni-file-picker
@@ -40,7 +40,7 @@
           :inputBorder="false"
           :styles="styles"
           :placeholderStyle="placeholderStyle"
-          placeholder="给活动一个响亮的标题（20字内）"
+          placeholder="标题（20字内）"
           @input="input"
         ></uni-easyinput>
       </view>
@@ -49,87 +49,8 @@
           type="textarea"
           v-model="content"
           :inputBorder="false"
-          placeholder="请描述活动内容、亮点，吸引大家参加吧~"
+          placeholder="请描述内容~"
         ></uni-easyinput>
-      </view>
-      <view class="" style="width: 100%">
-        <!-- <view class="button color_g" style="width: 85px" @click="openLocation">
-            <uni-icons class="icon" type="location-filled" size="15"></uni-icons>
-            <view>选择地点</view>
-            <uni-icons class="icon icon_right" type="right" size="15"></uni-icons>
-         
-          </view> -->
-        <view class="location_input color_g">
-          <uni-icons class="icon" type="location-filled" size="15"></uni-icons>
-          <uni-easyinput
-            v-model="location"
-            :inputBorder="false"
-            styles="font-size: 10px; color: #999"
-            placeholderStyle="color:#999; font-size:10px"
-            placeholder="请填写集合地点"
-          ></uni-easyinput>
-        </view>
-        <view
-          class="button color_g"
-          @click="openTime"
-          :style="datetimerange.length ? 'width: 280px' : 'width: 120px'"
-        >
-          <uni-icons
-            class="icon"
-            type="notification-filled"
-            size="15"
-          ></uni-icons>
-          <view>{{
-            datetimerange.length ? datetimerange.join(" ~ ") : "选择活动时间"
-          }}</view>
-          <uni-icons class="icon icon_right" type="right" size="15"></uni-icons>
-        </view>
-      </view>
-      <uni-popup
-        ref="locationPopup"
-        type="bottom"
-        border-radius="10px 10px 0 0"
-      >
-        <view class="page-body">
-          <view class="page-section page-section-gap">
-            <map
-              style="width: 100%; height: 300px"
-              :latitude="latitude"
-              :longitude="longitude"
-              :markers="covers"
-            >
-            </map>
-          </view>
-        </view>
-      </uni-popup>
-
-      <uni-popup ref="timePopup" type="bottom" border-radius="10px 10px 0 0">
-        <view class="time_popup">
-          <uni-datetime-picker
-            v-model="datetimerange"
-            type="datetimerange"
-            rangeSeparator="至"
-          />
-        </view>
-      </uni-popup>
-    </view>
-    <view class="card_title">发起人联系方式</view>
-    <view class="card">
-      <view class="contact_item">
-        <view class="contact_name">微信号</view>
-        <uni-easyinput
-          v-model="weixin"
-          :inputBorder="false"
-          placeholder="请输入微信号"
-        />
-      </view>
-      <view class="contact_item">
-        <view class="contact_name">手机号</view>
-        <uni-easyinput
-          v-model="phone"
-          :inputBorder="false"
-          placeholder="请输入手机号"
-        />
       </view>
     </view>
   </view>
