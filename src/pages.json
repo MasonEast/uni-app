@@ -31,7 +31,25 @@
     {
       "path": "pages/add/index",
       "style": {
-        "navigationBarTitleText": "发布任务"
+        "navigationBarTitleText": "发布"
+      }
+    },
+    {
+      "path": "pages/add/components/activity",
+      "style": {
+        "navigationBarTitleText": "发布活动"
+      }
+    },
+    {
+      "path": "pages/add/components/dynamic",
+      "style": {
+        "navigationBarTitleText": "发布动态"
+      }
+    },
+    {
+      "path": "pages/add/components/photoStore",
+      "style": {
+        "navigationBarTitleText": "图片库"
       }
     },
     {

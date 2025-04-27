@@ -13,11 +13,12 @@ export default {
     getDictOptions: (dictName) => get(`/dict/${dictName}`),
   },
 
-  // 商品相关
+  // 活动相关
   activity: {
     list: (params) => get("/post/list", { params }),
     detail: (id) => get(`/post/detail/${id}`),
     create: (data) => post("/post/create", data),
+    photos: () => get("/post/photos"), // 图片库
   },
 
   // 订单相关

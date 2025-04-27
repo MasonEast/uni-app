@@ -131,38 +131,51 @@
     <scroll-view scroll-y>
       <view
         class="scroll_item"
-        v-for="(item, index) in items"
+        v-for="(item, index) in activityList"
         :key="index"
         @click="goItemDetail('partner')"
       >
         <view class="scroll_title"> {{ item.title }} </view>
         <view class="scroll_content">
           <view class="scroll_user">
-            <image class="avatar" :src="item.user?.avatar" />
-            <view class="name">{{ item.user?.name }}</view>
-            <view class="intro">{{ item.user?.intro }}</view>
-            <view class="classify">{{ item.user?.classify }}</view>
+            <image class="avatar" :src="item.authorInfo?.avatarUrl" />
+            <view class="name">{{ item.authorInfo?.nickname }}</view>
+            <view class="intro">{{ item.intro }}</view>
+            <view class="classify">{{ item.classify }}</view>
           </view>
           <view class="scroll_time">
             <uni-tag
-              text="进行中"
+              :text="item.status || '进行中'"
               custom-style="background-color: #56e0e0; border-color: #56e0e0; color: #fff; font-size: 10px; padding: 1px 3px;"
             >
             </uni-tag>
-            <view class="time"> {{ item.time }} </view>
+            <!-- <view class="time"> {{ item.datetimerange.join(" ~ ") }} </view> -->
+            <view class="time">
+              <uni-dateformat
+                :date="+item.datetimerange[0]"
+                :threshold="[0, 0]"
+                format="yyyy-MM-dd hh:mm"
+              />
+              ~
+              <uni-dateformat
+                :date="+item.datetimerange[1]"
+                :threshold="[0, 0]"
+                format="yyyy-MM-dd hh:mm"
+              />
+            </view>
             <view> {{ item.place }} </view>
           </view>
         </view>
         <view class="img_group">
           <image
             class="scroll_img"
-            v-for="(img, index) in item.imgs"
+            v-for="(img, index) in item.images"
             :key="index"
             :src="img"
           />
         </view>
         <view class="participants">
-          <view class="participants_group">
+          <view v-if="item.registers.length > 0" class="participants_group">
             <image
               class="participant_avatar"
               v-for="(img, index) in item.imgs"
@@ -171,6 +184,7 @@
             />
             <view class="participant_num">17人想去</view>
           </view>
+          <view v-else></view>
           <view class="participant_btn">上车</view>
         </view>
       </view>
@@ -271,6 +285,7 @@ export default {
           imgs: ["/static/img/1.jpg", "/static/img/2.jpg", "/static/img/3.jpg"],
         },
       ],
+      activityList: [],
     };
   },
 
@@ -292,8 +307,9 @@ export default {
   methods: {
     async loadData() {
       console.log("页面加载");
-      const list = await this.$api.activity.list("activity/list");
-      console.log(list, "---------load");
+      const res = await this.$api.activity.list("activity/list");
+      console.log(res, "---------list");
+      this.activityList = res.posts;
     },
     handleTabChange(pagePath) {
       this.currentPage = pagePath;
@@ -627,12 +643,19 @@ export default {
   }
   .img_group {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
+    // &:after {
+    //   content: "";
+    //   width: 33%; /* 与元素等宽 */
+    //   height: 0; /* 隐藏高度 */
+    // }
     .scroll_img {
       width: 33%;
       height: 100px;
+      margin-right: calc(1% / 2);
     }
   }
+
   .participants {
     width: 100%;
     display: flex;
