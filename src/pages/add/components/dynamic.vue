@@ -82,11 +82,7 @@ export default {
       datetimerange: [],
       imgList: [],
       tempFiles: [],
-      range: [
-        { value: 0, text: "找搭子" },
-        { value: 1, text: "接送娃娃" },
-        { value: 2, text: "上班拼车" },
-      ],
+      range: [],
       styles: {
         color: "#56e0e0",
       },
@@ -106,7 +102,7 @@ export default {
   },
   onLoad() {},
   async mounted() {
-    this.range = await this.$api.dict.getDictOptions("activityType");
+    this.range = await this.$api.dict.getDictOptions("dynamicType");
   },
   methods: {
     openLocation() {
@@ -156,7 +152,7 @@ export default {
       const imgs = await this.$api.upload.uploadBatch(this.tempFiles);
       console.log("上传成功", imgs);
 
-      const res = await this.$api.activity.create({
+      const res = await this.$api.dynamic.create({
         title: this.title,
         content: this.content,
         location: this.location,
@@ -266,7 +262,7 @@ export default {
 .submit {
   display: flex;
   align-items: center;
-  height: 50px;
+  height: 80px;
   width: 100%;
   background-color: #fff;
   position: fixed;

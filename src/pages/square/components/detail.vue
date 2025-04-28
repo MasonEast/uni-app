@@ -1,41 +1,52 @@
 <template>
   <view class="partner_detail">
-    <uni-swiper-dot
-      :info="info"
-      :current="current"
-      field="content"
-      :mode="mode"
-    >
+    <uni-swiper-dot :info="info.images" :current="current" field="content">
       <swiper class="swiper-box" @change="change">
-        <swiper-item v-for="(item, index) in info" :key="index">
-          <view class="swiper-item" :class="'swiper-item' + index">
-            <img class="swiper-img" :src="item.img" />
-            <!-- <image class="img" src="@/static/img/1.jpg" /> -->
+        <swiper-item v-for="(item, index) in info.images" :key="index">
+          <view
+            class="swiper-item"
+            :style="{ backgroundImage: `url(${item})` }"
+          >
+            <img class="swiper-img" :src="item" mode="widthFix" />
           </view>
         </swiper-item>
       </swiper>
     </uni-swiper-dot>
     <view class="card">
-      <view class="title"> 我是活动的标题 </view>
-      <view class="item time">
+      <view class="title"> {{ info.title }} </view>
+      <!-- <view class="item time">
         <uni-icons
           class="icon"
           type="notification-filled"
           size="20"
         ></uni-icons>
-        <view>2025.04.09 19:00 - 2025.04.09 19:00</view>
+        <view>
+          <uni-dateformat
+            :date="+info.datetimerange?.[0]"
+            :threshold="[0, 0]"
+            format="yyyy-MM-dd hh:mm"
+          />
+          ~
+          <uni-dateformat
+            :date="+info.datetimerange?.[1]"
+            :threshold="[0, 0]"
+            format="yyyy-MM-dd hh:mm"
+          />
+        </view>
       </view>
       <view class="item location">
         <uni-icons class="icon" type="location-filled" size="20"></uni-icons>
-        <view>小区东门口</view>
-      </view>
+        <view>{{ info.location }}</view>
+      </view> -->
     </view>
     <view class="card publisher">
       <view class="user">
-        <image class="img" src="@/static/img/1.jpg" />
+        <image class="img" :src="info.authorInfo?.avatarUrl" />
         <view class="content">
-          <view class="name">梅超风</view>
-          <view class="intro">我擅长九阴白骨爪</view>
+          <view class="name">{{ info.authorInfo?.nickname }}</view>
+          <view class="intro">{{
+            info.authorInfo?.intro || "该用户暂无介绍"
+          }}</view>
         </view>
       </view>
       <view class="contact">
@@ -44,22 +55,21 @@
       </view>
     </view>
     <view class="card activity_intro">
-      <view class="title">活动介绍</view>
-      <view class="content">
-        这个周六，想去逛街，看看春季的衣服，一起吃饭，看电影，求组队,这个周六，想去逛街，看看春季的衣服，一起吃饭，看电影，求组队,这个周六，想去逛街，看看春季的衣服，一起吃饭，看电影，求组队，这个周六，想去逛街，看看春季的衣服，一起吃饭，看电影，求组队
+      <!-- <view class="title">活动介绍</view> -->
+      <view class="activity_content">
+        {{ info.content }}
       </view>
     </view>
   </view>
-  <view class="submit">
-    <!-- <view class="btn btn_draft" @click="openLocation">
-      <view>存草稿</view>
-    </view> -->
-    <view
-      class="btn btn_submit"
-      style="width: calc(100% - 125px)"
-      @click="openLocation"
-    >
-      <view>我要报名</view>
+  <view class="footer">
+    <view>
+      <uni-easyinput
+        class="input"
+        v-model="comment"
+        type="text"
+        placeholder="来条评论吧"
+        placeholderStyle="color:#56e0e0; font-size:12px"
+      />
     </view>
   </view>
 </template>
@@ -68,43 +78,42 @@
 export default {
   data() {
     return {
-      value: "",
-      title: "Hello",
       current: 0,
-      mode: "default",
-      info: [
-        {
-          content: "内容 A",
-          img: "/static/img/1.jpg",
-        },
-        {
-          content: "内容 B",
-          img: "/static/img/2.jpg",
-        },
-        {
-          content: "内容 C",
-          img: "/static/img/3.jpg",
-        },
-        {
-          content: "内容 C",
-          img: "/static/img/4.jpg",
-        },
-      ],
+      info: {},
+      registered: false,
+      comment: "",
     };
   },
-  onLoad() {},
+  async onLoad(options) {
+    console.log("options", options);
+    this.info = await this.$api.dynamic.detail(options.id);
+    const openid = uni.getStorageSync("openid");
+    if (this.info.registers.findIndex((item) => item.openid === openid) > -1) {
+      this.registered = true;
+    }
+    // console.log(this.info);
+  },
   methods: {
-    change(e) {
-      this.current = e.detail.current;
-    },
-    input(e) {
-      console.log("输入内容：", e);
-    },
-    iconClick(type) {
+    async handleRegister() {
+      if (this.registered) {
+        uni.showToast({
+          title: "已报名",
+          icon: "none",
+        });
+        return;
+      }
+      await this.$api.dynamic.register({ id: this.info._id });
       uni.showToast({
-        title: `点击了${type === "prefix" ? "左侧" : "右侧"}的图标`,
+        title: "报名成功",
         icon: "none",
       });
+
+      uni.navigateBack({
+        delta: 1,
+      });
+    },
+    change(e) {
+      this.current = e.detail.current;
     },
   },
 };
@@ -115,7 +124,7 @@ export default {
 
 .partner_detail {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: #f5f7fa;
   box-sizing: border-box;
   .card {
@@ -139,6 +148,11 @@ export default {
     font-weight: bold;
     margin: 8px;
   }
+  .activity_content {
+    white-space: pre-wrap;
+    padding: 20rpx;
+    font-size: 14px;
+  }
   .time {
     margin: 8px;
   }
@@ -161,7 +175,7 @@ export default {
         flex-direction: column;
         // align-items: center;
         // justify-content: center;
-        margin-left: 10px;
+
         .name {
           // margin-left: 5px;
         }
@@ -196,7 +210,8 @@ export default {
   }
 
   .activity_intro {
-    margin-bottom: 60px !important;
+    padding-bottom: 60px;
+    margin-bottom: 100px !important;
     .title {
       font-size: 16px;
       color: #999;
@@ -210,39 +225,19 @@ export default {
   }
 }
 
-.submit {
+.footer {
   display: flex;
-  justify-content: center;
   align-items: center;
-  height: 50px;
+  height: 60px;
   width: 100%;
   background-color: #fff;
   position: fixed;
   bottom: 0;
-  z-index: 1000;
-
-  .btn {
-    width: 120px;
-    height: 25px;
-    font-size: 10px;
-    border: 1px solid #f5f7fa;
-    border-radius: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-    margin-right: 10px;
-  }
-  .btn_draft {
-    width: 100px;
-    height: 30px;
-    font-size: 16px;
-  }
-  .btn_submit {
-    color: #fff;
-    background-color: variables.$primary-color;
-    font-size: 16px;
-    height: 30px;
+  z-index: 10;
+  padding: 0 20px;
+  .input {
+    width: 50%;
+    border-radius: 50%;
   }
 }
 
@@ -259,21 +254,30 @@ export default {
   align-items: center;
   height: 600px;
   color: #fff;
+  background-size: cover;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: inherit;
+    filter: blur(30px);
+    z-index: 1;
+  }
   .swiper-img {
     width: 100%;
     height: 100%;
+    position: relative;
+    z-index: 2;
   }
-}
 
-.swiper-item0 {
-  background-color: #cee1fd;
-}
-
-.swiper-item1 {
-  background-color: #b2cef7;
-}
-
-.swiper-item2 {
-  background-color: #cee1fd;
+  .footer :deep(.is-input-border) {
+    font-size: 12px;
+    padding: 0 !important;
+    border-radius: 50% !important;
+  }
 }
 </style>

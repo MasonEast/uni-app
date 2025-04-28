@@ -22,11 +22,14 @@ export default {
     photos: () => get("/post/photos"), // 图片库
   },
 
-  // 订单相关
-  order: {
-    create: (data) => post("/order/create", data),
-    list: (params) => get("/order/list", { params }),
-    cancel: (id) => del(`/order/cancel/${id}`),
+  // 动态相关
+  dynamic: {
+    list: (params) => get("/dynamic/list", { params }),
+    detail: (id) => get(`/dynamic/detail/${id}`),
+    create: (data) => post("/dynamic/create", data),
+    register: (data) => post("/dynamic/register", data),
+    updateViews: (id) => put(`/dynamic/views/${id}`),
+    updateLikes: (id) => put(`/dynamic/likes/${id}`),
   },
 
   upload: {

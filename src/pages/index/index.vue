@@ -120,10 +120,10 @@
         <view
           v-for="(item, index) in classifyList"
           :key="index"
-          :class="['item', currentIndex === index ? 'active' : '']"
-          @click="switchClassify(index)"
+          :class="['item', currentIndex === item.value ? 'active' : '']"
+          @click="switchClassify(item.value)"
         >
-          {{ item }}
+          {{ item.text }}
         </view>
       </view>
     </scroll-view>
@@ -200,18 +200,12 @@ export default {
     return {
       value: "",
       title: "Hello",
-      currentIndex: 0, // 默认选中第一个
+      currentIndex: -1, // 默认选中第一个
       classifyList: [
-        "全部",
-        "代买菜",
-        "娃娃接送",
-        "公园野营",
-        "上班拼车",
-        "二手交易",
-        "娃娃接送",
-        "公园野营",
-        "上班拼车",
-        "二手交易",
+        {
+          value: -1,
+          text: "全部",
+        },
       ], // 分类列表
       hotList: [
         {
@@ -288,13 +282,14 @@ export default {
         },
       ],
       activityList: [],
+      originalActivityList: [], // 原始数据列表
     };
   },
 
-  // async onLoad() {
-  //   const list = await this.$api.activity.list("activity/list");
-  //   console.log(list, "---------load");
-  // },
+  async onLoad() {
+    const res = await this.$api.dict.getDictOptions("activityType");
+    this.classifyList = this.classifyList.concat(res);
+  },
 
   onShow() {
     console.log("首页显示 - 请求数据");
@@ -312,6 +307,7 @@ export default {
       const res = await this.$api.activity.list("activity/list");
       console.log(res, "---------list");
       this.activityList = res.posts;
+      this.originalActivityList = res.posts; // 保存原始数据列表
     },
     handleTabChange(pagePath) {
       this.currentPage = pagePath;
@@ -319,8 +315,14 @@ export default {
         url: pagePath,
       });
     },
-    switchClassify(index) {
-      this.currentIndex = index;
+    switchClassify(value) {
+      this.currentIndex = value;
+      this.activityList = this.originalActivityList.filter((item) => {
+        if (value == -1) {
+          return true; // 全部分类
+        }
+        return item.type == value;
+      });
     },
     goDetail(type) {
       uni.navigateTo({
@@ -330,18 +332,11 @@ export default {
     goItemDetail(item) {
       console.log("跳转到详情页", item);
       uni.navigateTo({
-        // url: `/pages/${type}/components/detail`,
         url: `/pages/index/components/activityDetail?id=${item._id}`,
       });
     },
     change(e) {
       this.current = e.detail.current;
-    },
-    iconClick(type) {
-      uni.showToast({
-        title: `点击了${type === "prefix" ? "左侧" : "右侧"}的图标`,
-        icon: "none",
-      });
     },
   },
 };
