@@ -18,6 +18,7 @@ export default {
     list: (params) => get("/post/list", { params }),
     detail: (id) => get(`/post/detail/${id}`),
     create: (data) => post("/post/create", data),
+    register: (data) => post("/post/register", data),
     photos: () => get("/post/photos"), // 图片库
   },
 

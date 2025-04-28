@@ -22,13 +22,13 @@
         ></uni-icons>
         <view>
           <uni-dateformat
-            :date="+info.datetimerange[0]"
+            :date="+info.datetimerange?.[0]"
             :threshold="[0, 0]"
             format="yyyy-MM-dd hh:mm"
           />
           ~
           <uni-dateformat
-            :date="+info.datetimerange[1]"
+            :date="+info.datetimerange?.[1]"
             :threshold="[0, 0]"
             format="yyyy-MM-dd hh:mm"
           />
@@ -62,15 +62,12 @@
     </view>
   </view>
   <view class="submit">
-    <!-- <view class="btn btn_draft" @click="openLocation">
-        <view>存草稿</view>
-      </view> -->
     <view
       class="btn btn_submit"
       style="width: calc(100% - 125px)"
-      @click="openLocation"
+      @click="handleRegister"
     >
-      <view>我要报名</view>
+      <view>{{ registered ? "已报名" : "我要报名" }}</view>
     </view>
   </view>
 </template>
@@ -80,15 +77,38 @@ export default {
   data() {
     return {
       current: 0,
-      info: [],
+      info: {},
+      registered: false,
     };
   },
   async onLoad(options) {
     console.log("options", options);
     this.info = await this.$api.activity.detail(options.id);
+    const openid = uni.getStorageSync("openid");
+    if (this.info.registers.findIndex((item) => item.openid === openid) > -1) {
+      this.registered = true;
+    }
     // console.log(this.info);
   },
   methods: {
+    async handleRegister() {
+      if (this.registered) {
+        uni.showToast({
+          title: "已报名",
+          icon: "none",
+        });
+        return;
+      }
+      await this.$api.activity.register({ id: this.info._id });
+      uni.showToast({
+        title: "报名成功",
+        icon: "none",
+      });
+
+      uni.navigateBack({
+        delta: 1,
+      });
+    },
     change(e) {
       this.current = e.detail.current;
     },
@@ -205,7 +225,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 50px;
+  height: 80px;
   width: 100%;
   background-color: #fff;
   position: fixed;

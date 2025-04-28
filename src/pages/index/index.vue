@@ -178,11 +178,13 @@
           <view v-if="item.registers.length > 0" class="participants_group">
             <image
               class="participant_avatar"
-              v-for="(img, index) in item.imgs"
+              v-for="(register, index) in item.registers.slice(0, 4)"
               :key="index"
-              :src="img"
+              :src="register.avatarUrl"
             />
-            <view class="participant_num">17人想去</view>
+            <view class="participant_num"
+              >{{ item.registers.length }} 人想去</view
+            >
           </view>
           <view v-else></view>
           <view class="participant_btn">上车</view>
