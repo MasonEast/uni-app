@@ -70,8 +70,9 @@ export default {
 
         if (res[1].statusCode === 200) {
           // 登录成功处理
-          const { token, userInfo } = res[1].data;
+          const { token, openid, userInfo } = res[1].data;
           uni.setStorageSync("token", token);
+          uni.setStorageSync("openid", openid);
           uni.setStorageSync("userInfo", userInfo);
 
           uni.showToast({
@@ -124,8 +125,9 @@ export default {
             const res = await this.$api.user.login({ code, userInfo });
             console.log(res, "--------res");
 
-            const { token, userInfo } = res;
+            const { token, openid, userInfo } = res;
             uni.setStorageSync("token", token);
+            uni.setStorageSync("openid", openid);
             uni.setStorageSync("userInfo", userInfo);
 
             // 跳转到首页或其他页面

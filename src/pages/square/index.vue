@@ -5,10 +5,10 @@
         <view
           v-for="(item, index) in classifyList"
           :key="index"
-          :class="['item', currentIndex === index ? 'active' : '']"
-          @click="switchClassify(index)"
+          :class="['item', currentIndex === item.value ? 'active' : '']"
+          @click="switchClassify(item.value)"
         >
-          {{ item.label }}
+          {{ item.text }}
         </view>
       </view>
     </scroll-view>
@@ -16,20 +16,20 @@
     <view class="waterfall-container">
       <view
         class="waterfall-item"
-        v-for="(item, index) in filterList"
+        v-for="(item, index) in list"
         :key="index"
         @click="goDetail(item)"
       >
-        <image class="img" :src="item.img" mode="widthFix"></image>
+        <image class="img" :src="item.images[0]" mode="widthFix"></image>
         <view class="title">{{ item.title }}</view>
         <view class="info">
           <view class="user">
-            <img class="avatar" :src="item.avatar" alt="" />
-            <view class="name">{{ item.name }}</view>
+            <img class="avatar" :src="item.authorInfo?.avatarUrl" alt="" />
+            <view class="name">{{ item.authorInfo?.nickname }}</view>
           </view>
           <view class="like">
             <i class="iconfont icon-yanjing1"></i>
-            <view class="num">{{ item.like }}</view>
+            <view class="num">{{ item.viewCount || 0 }}</view>
           </view>
         </view>
       </view>
@@ -43,90 +43,44 @@ export default {
     return {
       value: "",
       title: "Hello",
-      currentIndex: 0, // 默认选中第一个
-      classifyList: [
-        { label: "全部", value: "all" },
-        { label: "便民信息", value: "info" },
-        { label: "二手交易", value: "secondhand" },
-        { label: "人力市场", value: "human" },
-      ], // 分类列表
-      list: [
-        {
-          img: "/static/img/1.jpg",
-          title: "运动不能停，学了三节课的腹式呼吸",
-          avatar: "/static/img/1.jpg",
-          name: "心爱的姑娘",
-          like: 0,
-        },
-        {
-          img: "/static/img/3.jpg",
-          title: "运动不能停，学了三节课的腹式呼吸",
-          avatar: "/static/img/1.jpg",
-          name: "心爱的姑娘",
-          like: 0,
-        },
-        {
-          img: "/static/img/bianmin.png",
-          title: "收废品电话",
-          avatar: "/static/img/1.jpg",
-          name: "心爱的姑娘",
-          like: 0,
-          classify: "info",
-        },
-        {
-          img: "/static/img/1.jpg",
-          title: "运动不能停，学了三节课的腹式呼吸",
-          avatar: "/static/img/1.jpg",
-          name: "心爱的姑娘",
-          like: 0,
-        },
-        {
-          img: "/static/img/2.jpg",
-          title: "运动不能停，学了三节课的腹式呼吸",
-          avatar: "/static/img/1.jpg",
-          name: "心爱的姑娘",
-          like: 0,
-        },
-        {
-          img: "/static/img/3.jpg",
-          title: "运动不能停，学了三节课的腹式呼吸",
-          avatar: "/static/img/1.jpg",
-          name: "心爱的姑娘",
-          like: 0,
-        },
-        {
-          img: "/static/img/4.jpg",
-          title: "运动不能停，学了三节课的腹式呼吸",
-          avatar: "/static/img/1.jpg",
-          name: "心爱的姑娘",
-          like: 0,
-        },
-        {
-          img: "/static/img/1.jpg",
-          title: "运动不能停，学了三节课的腹式呼吸",
-          avatar: "/static/img/1.jpg",
-          name: "心爱的姑娘",
-          like: 0,
-        },
-      ],
+      currentIndex: -1, // 默认选中第一个
+      classifyList: [{ text: "全部", value: -1 }], // 分类列表
+      list: [],
       filterList: [],
     };
   },
-  onLoad() {
-    this.filterList = this.list;
+
+  async onLoad() {
+    const res = await this.$api.dict.getDictOptions("dynamicType");
+    this.classifyList = this.classifyList.concat(res);
+  },
+
+  onShow() {
+    console.log("首页显示 - 请求数据");
+    this.loadData();
   },
 
   methods: {
-    switchClassify(index) {
-      this.currentIndex = index;
-      this.filterList = this.list.filter((item) => {
-        if (index === 0) return true;
-        return item.classify === this.classifyList[index].value;
+    async loadData() {
+      console.log("页面加载");
+      const res = await this.$api.dynamic.list();
+
+      this.list = res.dynamics;
+      this.originalList = res.dynamics; // 保存原始数据列表
+    },
+    switchClassify(value) {
+      this.currentIndex = value;
+      this.list = this.originalList.filter((item) => {
+        if (value == -1) {
+          return true; // 全部分类
+        }
+        return item.type == value;
       });
     },
     goDetail(item) {
+      this.$api.dynamic.updateViews(item._id); // 更新浏览量
       uni.navigateTo({
-        url: `/pages/square/components/detail`,
+        url: `/pages/square/components/detail?id=${item._id}`,
       });
     },
   },
@@ -143,16 +97,19 @@ export default {
   background-color: #f5f7fa;
   box-sizing: border-box;
   .classify_box {
+    display: flex;
+    align-items: center;
     position: fixed;
     top: 0;
     width: 100%;
+    height: 40px;
     white-space: nowrap;
     background-color: #fff;
     font-size: 12px;
     .classify {
       display: inline-block;
       background-color: #fff;
-      padding: 6px;
+      padding: 12px;
       .item {
         margin-right: 10px;
         display: inline-block;
@@ -177,10 +134,11 @@ export default {
   .waterfall-item {
     break-inside: avoid; /* 防止元素被分割到不同列 */
     margin-bottom: 10px;
+    padding: 10px;
     background: #fff;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     .img {
       width: 100%;
     }

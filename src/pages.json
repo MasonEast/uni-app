@@ -15,6 +15,12 @@
       }
     },
     {
+      "path": "pages/index/components/activityDetail",
+      "style": {
+        "navigationBarTitleText": "详情"
+      }
+    },
+    {
       "path": "pages/square/index",
       "style": {
         "navigationBarTitleText": "广场",
@@ -31,7 +37,25 @@
     {
       "path": "pages/add/index",
       "style": {
-        "navigationBarTitleText": "发布任务"
+        "navigationBarTitleText": "发布"
+      }
+    },
+    {
+      "path": "pages/add/components/activity",
+      "style": {
+        "navigationBarTitleText": "发布活动"
+      }
+    },
+    {
+      "path": "pages/add/components/dynamic",
+      "style": {
+        "navigationBarTitleText": "发布动态"
+      }
+    },
+    {
+      "path": "pages/add/components/photoStore",
+      "style": {
+        "navigationBarTitleText": "图片库"
       }
     },
     {
@@ -102,7 +126,7 @@
         "pagePath": "pages/add/index",
         "iconPath": "static/nav/fabu.png",
         "selectedIconPath": "static/nav/fabu_on.png",
-        "text": "发布任务",
+        "text": "发布",
         "style": {
           "height": "50px",
           "width": "50px",

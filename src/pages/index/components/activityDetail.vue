@@ -14,7 +14,7 @@
     </uni-swiper-dot>
     <view class="card">
       <view class="title"> {{ info.title }} </view>
-      <!-- <view class="item time">
+      <view class="item time">
         <uni-icons
           class="icon"
           type="notification-filled"
@@ -37,7 +37,7 @@
       <view class="item location">
         <uni-icons class="icon" type="location-filled" size="20"></uni-icons>
         <view>{{ info.location }}</view>
-      </view> -->
+      </view>
     </view>
     <view class="card publisher">
       <view class="user">
@@ -55,21 +55,19 @@
       </view>
     </view>
     <view class="card activity_intro">
-      <!-- <view class="title">活动介绍</view> -->
+      <view class="title">活动介绍</view>
       <view class="activity_content">
         {{ info.content }}
       </view>
     </view>
   </view>
-  <view class="footer">
-    <view>
-      <uni-easyinput
-        class="input"
-        v-model="comment"
-        type="text"
-        placeholder="来条评论吧"
-        placeholderStyle="color:#56e0e0; font-size:12px"
-      />
+  <view class="submit">
+    <view
+      class="btn btn_submit"
+      style="width: calc(100% - 125px)"
+      @click="handleRegister"
+    >
+      <view>{{ registered ? "已报名" : "我要报名" }}</view>
     </view>
   </view>
 </template>
@@ -81,12 +79,11 @@ export default {
       current: 0,
       info: {},
       registered: false,
-      comment: "",
     };
   },
   async onLoad(options) {
     console.log("options", options);
-    this.info = await this.$api.dynamic.detail(options.id);
+    this.info = await this.$api.activity.detail(options.id);
     const openid = uni.getStorageSync("openid");
     if (this.info.registers.findIndex((item) => item.openid === openid) > -1) {
       this.registered = true;
@@ -102,7 +99,7 @@ export default {
         });
         return;
       }
-      await this.$api.dynamic.register({ id: this.info._id });
+      await this.$api.activity.register({ id: this.info._id });
       uni.showToast({
         title: "报名成功",
         icon: "none",
@@ -124,7 +121,7 @@ export default {
 
 .partner_detail {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: #f5f7fa;
   box-sizing: border-box;
   .card {
@@ -210,8 +207,7 @@ export default {
   }
 
   .activity_intro {
-    padding-bottom: 60px;
-    margin-bottom: 100px !important;
+    margin-bottom: 60px !important;
     .title {
       font-size: 16px;
       color: #999;
@@ -225,19 +221,39 @@ export default {
   }
 }
 
-.footer {
+.submit {
   display: flex;
+  justify-content: center;
   align-items: center;
-  height: 60px;
+  height: 80px;
   width: 100%;
   background-color: #fff;
   position: fixed;
   bottom: 0;
-  z-index: 10;
-  padding: 0 20px;
-  .input {
-    width: 50%;
-    border-radius: 50%;
+  z-index: 1000;
+
+  .btn {
+    width: 120px;
+    height: 25px;
+    font-size: 10px;
+    border: 1px solid #f5f7fa;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+  .btn_draft {
+    width: 100px;
+    height: 30px;
+    font-size: 16px;
+  }
+  .btn_submit {
+    color: #fff;
+    background-color: variables.$primary-color;
+    font-size: 16px;
+    height: 30px;
   }
 }
 
@@ -264,7 +280,7 @@ export default {
     right: -20px;
     bottom: -20px;
     background: inherit;
-    filter: blur(30px);
+    filter: blur(15px);
     z-index: 1;
   }
   .swiper-img {
@@ -273,11 +289,17 @@ export default {
     position: relative;
     z-index: 2;
   }
-
-  .footer :deep(.is-input-border) {
-    font-size: 12px;
-    padding: 0 !important;
-    border-radius: 50% !important;
-  }
 }
+
+// .swiper-item0 {
+//   background-color: #cee1fd;
+// }
+
+// .swiper-item1 {
+//   background-color: #b2cef7;
+// }
+
+// .swiper-item2 {
+//   background-color: #cee1fd;
+// }
 </style>

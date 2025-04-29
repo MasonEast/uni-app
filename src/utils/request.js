@@ -213,7 +213,7 @@ export const uploadBatch = (url, files = [], formData = {}) => {
   return Promise.all(uploadTasks)
     .then((results) => {
       console.log("所有文件上传成功", results);
-      return results;
+      return results.map((item) => JSON.parse(item.data));
     })
     .catch((err) => {
       console.error("部分文件上传失败", err);

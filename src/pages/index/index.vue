@@ -120,10 +120,10 @@
         <view
           v-for="(item, index) in classifyList"
           :key="index"
-          :class="['item', currentIndex === index ? 'active' : '']"
-          @click="switchClassify(index)"
+          :class="['item', currentIndex === item.value ? 'active' : '']"
+          @click="switchClassify(item.value)"
         >
-          {{ item }}
+          {{ item.text }}
         </view>
       </view>
     </scroll-view>
@@ -131,46 +131,62 @@
     <scroll-view scroll-y>
       <view
         class="scroll_item"
-        v-for="(item, index) in items"
+        v-for="(item, index) in activityList"
         :key="index"
-        @click="goItemDetail('partner')"
+        @click="goItemDetail(item)"
       >
         <view class="scroll_title"> {{ item.title }} </view>
         <view class="scroll_content">
           <view class="scroll_user">
-            <image class="avatar" :src="item.user?.avatar" />
-            <view class="name">{{ item.user?.name }}</view>
-            <view class="intro">{{ item.user?.intro }}</view>
-            <view class="classify">{{ item.user?.classify }}</view>
+            <image class="avatar" :src="item.authorInfo?.avatarUrl" />
+            <view class="name">{{ item.authorInfo?.nickname }}</view>
+            <view class="intro">{{ item.intro }}</view>
+            <view class="classify">{{ item.classify }}</view>
           </view>
           <view class="scroll_time">
             <uni-tag
-              text="进行中"
+              :text="item.status || '进行中'"
               custom-style="background-color: #56e0e0; border-color: #56e0e0; color: #fff; font-size: 10px; padding: 1px 3px;"
             >
             </uni-tag>
-            <view class="time"> {{ item.time }} </view>
+            <!-- <view class="time"> {{ item.datetimerange.join(" ~ ") }} </view> -->
+            <view class="time">
+              <uni-dateformat
+                :date="+item.datetimerange[0]"
+                :threshold="[0, 0]"
+                format="yyyy-MM-dd hh:mm"
+              />
+              ~
+              <uni-dateformat
+                :date="+item.datetimerange[1]"
+                :threshold="[0, 0]"
+                format="yyyy-MM-dd hh:mm"
+              />
+            </view>
             <view> {{ item.place }} </view>
           </view>
         </view>
         <view class="img_group">
           <image
             class="scroll_img"
-            v-for="(img, index) in item.imgs"
+            v-for="(img, index) in item.images.slice(0, 3)"
             :key="index"
             :src="img"
           />
         </view>
         <view class="participants">
-          <view class="participants_group">
+          <view v-if="item.registers.length > 0" class="participants_group">
             <image
               class="participant_avatar"
-              v-for="(img, index) in item.imgs"
+              v-for="(register, index) in item.registers.slice(0, 4)"
               :key="index"
-              :src="img"
+              :src="register.avatarUrl"
             />
-            <view class="participant_num">17人想去</view>
+            <view class="participant_num"
+              >{{ item.registers.length }} 人想去</view
+            >
           </view>
+          <view v-else></view>
           <view class="participant_btn">上车</view>
         </view>
       </view>
@@ -184,18 +200,12 @@ export default {
     return {
       value: "",
       title: "Hello",
-      currentIndex: 0, // 默认选中第一个
+      currentIndex: -1, // 默认选中第一个
       classifyList: [
-        "全部",
-        "代买菜",
-        "娃娃接送",
-        "公园野营",
-        "上班拼车",
-        "二手交易",
-        "娃娃接送",
-        "公园野营",
-        "上班拼车",
-        "二手交易",
+        {
+          value: -1,
+          text: "全部",
+        },
       ], // 分类列表
       hotList: [
         {
@@ -271,13 +281,15 @@ export default {
           imgs: ["/static/img/1.jpg", "/static/img/2.jpg", "/static/img/3.jpg"],
         },
       ],
+      activityList: [],
+      originalActivityList: [], // 原始数据列表
     };
   },
 
-  // async onLoad() {
-  //   const list = await this.$api.activity.list("activity/list");
-  //   console.log(list, "---------load");
-  // },
+  async onLoad() {
+    const res = await this.$api.dict.getDictOptions("activityType");
+    this.classifyList = this.classifyList.concat(res);
+  },
 
   onShow() {
     console.log("首页显示 - 请求数据");
@@ -292,8 +304,10 @@ export default {
   methods: {
     async loadData() {
       console.log("页面加载");
-      const list = await this.$api.activity.list("activity/list");
-      console.log(list, "---------load");
+      const res = await this.$api.activity.list("activity/list");
+      console.log(res, "---------list");
+      this.activityList = res.posts;
+      this.originalActivityList = res.posts; // 保存原始数据列表
     },
     handleTabChange(pagePath) {
       this.currentPage = pagePath;
@@ -301,27 +315,28 @@ export default {
         url: pagePath,
       });
     },
-    switchClassify(index) {
-      this.currentIndex = index;
+    switchClassify(value) {
+      this.currentIndex = value;
+      this.activityList = this.originalActivityList.filter((item) => {
+        if (value == -1) {
+          return true; // 全部分类
+        }
+        return item.type == value;
+      });
     },
     goDetail(type) {
       uni.navigateTo({
         url: `/pages/${type}/index`,
       });
     },
-    goItemDetail(type) {
+    goItemDetail(item) {
+      console.log("跳转到详情页", item);
       uni.navigateTo({
-        url: `/pages/${type}/components/detail`,
+        url: `/pages/index/components/activityDetail?id=${item._id}`,
       });
     },
     change(e) {
       this.current = e.detail.current;
-    },
-    iconClick(type) {
-      uni.showToast({
-        title: `点击了${type === "prefix" ? "左侧" : "右侧"}的图标`,
-        icon: "none",
-      });
     },
   },
 };
@@ -627,12 +642,19 @@ export default {
   }
   .img_group {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
+    // &:after {
+    //   content: "";
+    //   width: 33%; /* 与元素等宽 */
+    //   height: 0; /* 隐藏高度 */
+    // }
     .scroll_img {
       width: 33%;
       height: 100px;
+      margin-right: calc(1% / 2);
     }
   }
+
   .participants {
     width: 100%;
     display: flex;
