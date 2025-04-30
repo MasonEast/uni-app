@@ -32,6 +32,7 @@ export default {
     return {
       value: "",
       title: "Hello",
+      userInfo: ''
     };
   },
   onLoad() {},
@@ -97,13 +98,13 @@ export default {
     },
 
     async onGetUserInfo(e) {
-      const userInfo = e.detail.userInfo;
-      if (userInfo) {
+      this.userInfo = e.detail.userInfo;
+      if (this.userInfo) {
         // 用户允许授权
-        console.log("用户信息:", userInfo);
+        console.log("用户信息:", this.userInfo);
 
         // 保存到本地
-        uni.setStorageSync("userInfo", userInfo);
+        // uni.setStorageSync("userInfo", userInfo);
         // 发送到服务器
         // await this.sendUserInfoToServer(userInfo);
       } else {
@@ -122,7 +123,8 @@ export default {
           console.log(loginRes, "----code");
           // 将code发送到你的Koa后端
           try {
-            const res = await this.$api.user.login({ code, userInfo });
+            console.log(this.userInfo)
+            const res = await this.$api.user.login({ code, userInfo: this.userInfo });
             console.log(res, "--------res");
 
             const { token, openid, userInfo } = res;

@@ -62,14 +62,30 @@
     </view>
   </view>
   <view class="footer">
-    <view>
-      <uni-easyinput
+    <view class="input">
+        <uni-easyinput
         class="input"
         v-model="comment"
         type="text"
-        placeholder="来条评论吧"
-        placeholderStyle="color:#56e0e0; font-size:12px"
+        placeholder="说点什么..."
+        placeholderStyle=" font-size:12px"
       />
+    </view>
+    <view class="icons">
+      
+      <view >
+        
+        <uni-icons type="hand-up" size="22"></uni-icons>
+        <view class="text">0</view>
+      </view>
+      <view>
+        <uni-icons type="chat" size="22"></uni-icons>
+        <view class="text">0</view>
+      </view>
+      <view>
+        <uni-icons type="star" size="22"></uni-icons>
+        <view class="text">0</view>
+      </view>
     </view>
   </view>
 </template>
@@ -228,6 +244,7 @@ export default {
 .footer {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 60px;
   width: 100%;
   background-color: #fff;
@@ -235,9 +252,19 @@ export default {
   bottom: 0;
   z-index: 10;
   padding: 0 20px;
+  box-sizing: border-box;
   .input {
     width: 50%;
-    border-radius: 50%;
+  }
+  .icons {
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    margin-top: 5px;
+    .text {
+        font-size: 12px;
+    }
   }
 }
 
@@ -274,10 +301,11 @@ export default {
     z-index: 2;
   }
 
-  .footer :deep(.is-input-border) {
+
+}
+:deep(.uni-easyinput__content) {
     font-size: 12px;
     padding: 0 !important;
-    border-radius: 50% !important;
+    border-radius: 40px !important;
   }
-}
 </style>
