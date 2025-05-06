@@ -45,7 +45,7 @@
         <view class="content">
           <view class="name">{{ info.authorInfo?.nickname }}</view>
           <view class="intro">{{
-            info.authorInfo?.intro || "该用户暂无介绍"
+            info.authorInfo?.intro || '该用户暂无介绍'
           }}</view>
         </view>
       </view>
@@ -61,9 +61,10 @@
       </view>
     </view>
   </view>
+  <Comment />
   <view class="footer">
     <view class="input">
-        <uni-easyinput
+      <uni-easyinput
         class="input"
         v-model="comment"
         type="text"
@@ -72,56 +73,88 @@
       />
     </view>
     <view class="icons">
-      
-      <view >
-        
-        <uni-icons type="hand-up" size="22"></uni-icons>
-        <view class="text">0</view>
+      <view @click="handleOpt('like')">
+        <uni-icons v-if="!islike" type="hand-up" size="22"></uni-icons>
+        <uni-icons
+          v-else
+          type="hand-up-filled"
+          color="#ff5a5f"
+          size="22"
+        ></uni-icons>
+        <view class="text">{{ info.likeCount || 0 }}</view>
       </view>
       <view>
         <uni-icons type="chat" size="22"></uni-icons>
-        <view class="text">0</view>
+        <view class="text">{{ info.commentCount || 0 }}</view>
       </view>
       <view>
-        <uni-icons type="star" size="22"></uni-icons>
-        <view class="text">0</view>
+        <uni-icons v-if="!isCollect" type="star" size="22"></uni-icons>
+        <uni-icons
+          v-else
+          type="star-filled"
+          color="#ff5a5f"
+          size="22"
+        ></uni-icons>
+        <view class="text">{{ info.collectCount || 0 }}</view>
       </view>
     </view>
   </view>
 </template>
 
 <script>
+import Comment from '@/components/comment.vue';
+
 export default {
+  components: {
+    Comment,
+  },
   data() {
     return {
       current: 0,
       info: {},
       registered: false,
-      comment: "",
+      comment: '',
+      islike: false,
+      isCollect: false,
     };
   },
   async onLoad(options) {
-    console.log("options", options);
+    console.log('options', options);
     this.info = await this.$api.dynamic.detail(options.id);
-    const openid = uni.getStorageSync("openid");
-    if (this.info.registers.findIndex((item) => item.openid === openid) > -1) {
-      this.registered = true;
+    const userInfo = await this.$api.user.getInfo();
+    console.log('userInfo', userInfo, options.id);
+    if (userInfo.likes.findIndex((item) => item === options.id) > -1) {
+      this.islike = true;
     }
-    // console.log(this.info);
+    if (userInfo.collects.findIndex((item) => item === options.id) > -1) {
+      this.isCollect = true;
+    }
   },
   methods: {
+    handleOpt(type) {
+      if (type == 'like') {
+        const num = this.islike ? -1 : 1;
+        this.$api.dynamic.updateLikes(this.info._id, num);
+        this.islike = !this.islike;
+      }
+      if (type == 'collect') {
+        const num = this.isCollect ? -1 : 1;
+        this.$api.dynamic.updateCollects(this.info._id, num);
+        this.isCollect = !this.iscollect;
+      }
+    },
     async handleRegister() {
       if (this.registered) {
         uni.showToast({
-          title: "已报名",
-          icon: "none",
+          title: '已报名',
+          icon: 'none',
         });
         return;
       }
       await this.$api.dynamic.register({ id: this.info._id });
       uni.showToast({
-        title: "报名成功",
-        icon: "none",
+        title: '报名成功',
+        icon: 'none',
       });
 
       uni.navigateBack({
@@ -136,7 +169,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "variables";
+@use 'variables';
 
 .partner_detail {
   width: 100%;
@@ -226,8 +259,8 @@ export default {
   }
 
   .activity_intro {
-    padding-bottom: 60px;
-    margin-bottom: 100px !important;
+    // padding-bottom: 60px;
+    // margin-bottom: 100px !important;
     .title {
       font-size: 16px;
       color: #999;
@@ -236,7 +269,7 @@ export default {
     .content {
       font-size: 14px;
       color: #333;
-      margin: 10px 8px 80px 8px;
+      margin: 10px 8px 10px 8px;
     }
   }
 }
@@ -263,7 +296,7 @@ export default {
     text-align: center;
     margin-top: 5px;
     .text {
-        font-size: 12px;
+      font-size: 12px;
     }
   }
 }
@@ -284,7 +317,7 @@ export default {
   background-size: cover;
 
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     top: -20px;
     left: -20px;
@@ -300,12 +333,10 @@ export default {
     position: relative;
     z-index: 2;
   }
-
-
 }
 :deep(.uni-easyinput__content) {
-    font-size: 12px;
-    padding: 0 !important;
-    border-radius: 40px !important;
-  }
+  font-size: 12px;
+  padding: 0 !important;
+  border-radius: 40px !important;
+}
 </style>

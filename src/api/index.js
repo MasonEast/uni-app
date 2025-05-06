@@ -29,7 +29,9 @@ export default {
     create: (data) => post("/dynamic/create", data),
     register: (data) => post("/dynamic/register", data),
     updateViews: (id) => put(`/dynamic/views/${id}`),
-    updateLikes: (id) => put(`/dynamic/likes/${id}`),
+    updateLikes: (id, num) => put(`/dynamic/likes/${id}?num=${num}`),
+    updateCollects: (id, num) => put(`/dynamic/collects/${id}?num=${num}`),
+
   },
 
   upload: {
