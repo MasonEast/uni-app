@@ -87,7 +87,7 @@
         <uni-icons type="chat" size="22"></uni-icons>
         <view class="text">{{ info.commentCount || 0 }}</view>
       </view>
-      <view>
+      <view @click="handleOpt('collect')">
         <uni-icons v-if="!isCollect" type="star" size="22"></uni-icons>
         <uni-icons
           v-else
@@ -135,12 +135,14 @@ export default {
       if (type == 'like') {
         const num = this.islike ? -1 : 1;
         this.$api.dynamic.updateLikes(this.info._id, num);
+        this.info.likeCount += num;
         this.islike = !this.islike;
       }
       if (type == 'collect') {
         const num = this.isCollect ? -1 : 1;
         this.$api.dynamic.updateCollects(this.info._id, num);
-        this.isCollect = !this.iscollect;
+        this.info.collectCount += num;
+        this.isCollect = !this.isCollect;
       }
     },
     async handleRegister() {
