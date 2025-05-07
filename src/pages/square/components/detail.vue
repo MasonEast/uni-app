@@ -64,13 +64,13 @@
   <Comment />
   <view class="footer">
     <view class="input">
-      <uni-easyinput
+      <!-- <uni-easyinput
         class="input"
-        v-model="comment"
         type="text"
         placeholder="说点什么..."
         placeholderStyle=" font-size:12px"
-      />
+        @focus="toggle"
+      /> -->
     </view>
     <view class="icons">
       <view @click="handleOpt('like')">
@@ -83,7 +83,7 @@
         ></uni-icons>
         <view class="text">{{ info.likeCount || 0 }}</view>
       </view>
-      <view>
+      <view @click="toggle">
         <uni-icons type="chat" size="22"></uni-icons>
         <view class="text">{{ info.commentCount || 0 }}</view>
       </view>
@@ -99,6 +99,21 @@
       </view>
     </view>
   </view>
+
+  <uni-popup ref="popup" background-color="#fff" @change="popupChange">
+    <view class="popup-content">
+      <uni-easyinput
+        :focus="popupShow"
+        @focus="onFocus"
+        @blur="onBlur"
+        v-model="comment"
+        type="textarea"
+        placeholder="说点什么..."
+        placeholderStyle=" font-size:12px"
+      />
+      <view class="btn" @click="handleComment">发送</view>
+    </view>
+  </uni-popup>
 </template>
 
 <script>
@@ -116,6 +131,10 @@ export default {
       comment: '',
       islike: false,
       isCollect: false,
+      popupShow: false,
+      inputBottom: 0,
+      keyboardHeight: 0,
+      safeAreaBottom: 0,
     };
   },
   async onLoad(options) {
@@ -130,7 +149,35 @@ export default {
       this.isCollect = true;
     }
   },
+  mounted() {
+    // 监听键盘高度变化
+    uni.onKeyboardHeightChange((res) => {
+      this.keyboardHeight = res.height;
+      // iOS 安全区域适配（需真机调试）
+      if (uni.getSystemInfoSync().platform === 'ios') {
+        this.safeAreaBottom = plus.navigator.getSafeAreaInsets().deviceBottom;
+      }
+    });
+  },
   methods: {
+    toggle(type) {
+      this.$refs.popup.open('bottom');
+      this.$nextTick(() => {
+        this.popupShow = true; // 下一帧触发弹窗输入框焦点
+      });
+    },
+    popupChange(e) {
+      if (!e.show) {
+        this.popupShow = false;
+      }
+    },
+    onFocus() {
+      // 动态计算输入框位置（键盘高度 - 安全区域）
+      this.inputBottom = `${this.keyboardHeight - this.safeAreaBottom}px`;
+    },
+    onBlur() {
+      this.inputBottom = '0';
+    },
     handleOpt(type) {
       if (type == 'like') {
         const num = this.islike ? -1 : 1;
@@ -145,24 +192,7 @@ export default {
         this.isCollect = !this.isCollect;
       }
     },
-    async handleRegister() {
-      if (this.registered) {
-        uni.showToast({
-          title: '已报名',
-          icon: 'none',
-        });
-        return;
-      }
-      await this.$api.dynamic.register({ id: this.info._id });
-      uni.showToast({
-        title: '报名成功',
-        icon: 'none',
-      });
-
-      uni.navigateBack({
-        delta: 1,
-      });
-    },
+    handleComment() {},
     change(e) {
       this.current = e.detail.current;
     },
@@ -172,8 +202,10 @@ export default {
 
 <style lang="scss" scoped>
 @use 'variables';
+@use 'mixins';
 
 .partner_detail {
+  position: relative;
   width: 100%;
   height: 100%;
   background-color: #f5f7fa;
@@ -301,6 +333,11 @@ export default {
       font-size: 12px;
     }
   }
+  :deep(.uni-easyinput__content) {
+    font-size: 12px;
+    padding: 0 !important;
+    border-radius: 40px !important;
+  }
 }
 
 .swiper-box {
@@ -336,9 +373,17 @@ export default {
     z-index: 2;
   }
 }
-:deep(.uni-easyinput__content) {
-  font-size: 12px;
-  padding: 0 !important;
-  border-radius: 40px !important;
+
+.popup-content {
+  padding: 20px;
+  background-color: #fff;
+  .btn {
+    float: right;
+    @include mixins.btn;
+    width: 80px;
+    font-size: 12px;
+    background-color: variables.$primary-color;
+    color: #fff;
+  }
 }
 </style>

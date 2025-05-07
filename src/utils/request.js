@@ -1,7 +1,7 @@
 // utils/request.js
 
 // 基础路径
-const BASE_URL = "http://localhost:3000/api";
+const BASE_URL = "http://192.168.110.78:3000/api";
 
 // 请求拦截器
 const requestInterceptor = (config) => {

@@ -32,8 +32,12 @@
       "path": "pages/square/components/detail",
       "style": {
         "navigationBarTitleText": "广场",
-        "navigationBarBackgroundColor": "#CCFFFF"
+        "navigationBarBackgroundColor": "#CCFFFF",
+        "app-plus": {
+          "softinputMode": "adjustResize" 
+        }
       }
+     
     },
     {
       "path": "pages/add/index",
