@@ -272,9 +272,6 @@ export default {
         // align-items: center;
         // justify-content: center;
 
-        .name {
-          // margin-left: 5px;
-        }
         .intro {
           font-size: 10px;
           color: #999;
