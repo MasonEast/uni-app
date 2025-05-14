@@ -61,7 +61,9 @@
       </view>
     </view>
   </view>
-  <Comment />
+  <view v-if="info._id">
+    <Comment ref="commentRef" :id="info._id" />
+  </view>
   <view class="footer">
     <view class="input">
       <!-- <uni-easyinput
@@ -192,7 +194,18 @@ export default {
         this.isCollect = !this.isCollect;
       }
     },
-    handleComment() {},
+    async handleComment() {
+      const num = 1;
+      await this.$api.comment.create({
+        content: this.comment,
+        dynamicId: this.info._id,
+      });
+      await this.$api.dynamic.updateComments(this.info._id, 1);
+      uni.showToast('评论成功');
+      this.$refs.popup.close();
+      this.info.commentCount += num;
+      this.$refs.commentRef.getComments();
+    },
     change(e) {
       this.current = e.detail.current;
     },

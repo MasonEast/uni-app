@@ -30,8 +30,16 @@ export default {
     register: (data) => post("/dynamic/register", data),
     updateViews: (id) => put(`/dynamic/views/${id}`),
     updateLikes: (id, num) => put(`/dynamic/likes/${id}?num=${num}`),
+    updateComments: (id, num) => put(`/dynamic/comments/${id}?num=${num}`),
     updateCollects: (id, num) => put(`/dynamic/collects/${id}?num=${num}`),
 
+  },
+
+    // 评论相关
+  comment: {
+    create: (data) => post("/comment/create", data),
+    reply: (commentId, data) => post(`/comment/${commentId}/reply`, data),
+    getComments: (postId) => get(`/comment/${postId}`),
   },
 
   upload: {

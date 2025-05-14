@@ -6,12 +6,12 @@
       <view class="comment-item" v-for="item in commentList" :key="item.id">
         <!-- 主评论内容 -->
         <view class="main-comment">
-          <image class="avatar" :src="item.user.avatar" />
+          <image class="avatar" :src="item.author?.userInfo?.avatarUrl" />
           <view class="content">
-            <view class="nickname">{{ item.user.nickname }}</view>
+            <view class="nickname">{{ item.author?.userInfo?.nickName }}</view>
             <text class="text">{{ item.content }}</text>
             <view class="actions">
-              <text @click="handleReply">回复</text>
+              <!-- <text @click="handleReply">回复</text> -->
               <!-- <text @click="toggleLike">点赞 {{ likeCount }}</text> -->
             </view>
           </view>
@@ -38,61 +38,28 @@
 
 <script>
 export default {
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
-      commentList: [
-        {
-          id: 1,
-          content: '主评论内容广发华福回复你急了急了飞机号',
-          user: {
-            avatar: '/static/png/chigua.png',
-            nickname: '用户A',
-          },
-          createTime: '2025-05-06',
-          replies: [
-            // 嵌套回复
-            {
-              id: 2,
-              parentId: 1,
-              content: '回复内容',
-              replyTo: '用户B',
-              user: {
-                avatar: '/static/png/chigua.png',
-                nickname: '用户A',
-              },
-            },
-          ],
-        },
-        {
-          id: 2,
-          content: '主评论内容2',
-          user: {
-            avatar: '/static/png/chigua.png',
-            nickname: '用户cc',
-          },
-          createTime: '2025-05-06',
-          replies: [
-            // 嵌套回复
-            {
-              id: 2,
-              parentId: 1,
-              content: '回复内容',
-              replyTo: '用户B',
-              user: {
-                avatar: '/static/png/chigua.png',
-                nickname: '用户A',
-              },
-            },
-          ],
-        },
-      ], // 评论数据
+      commentList: [], // 评论数据
       replyContent: '', // 输入内容
       currentComment: null, // 当前回复对象
       page: 1,
       pageSize: 10,
     };
   },
+  mounted() {
+    this.getComments(this.id);
+  },
   methods: {
+    async getComments() {
+      this.commentList = await this.$api.comment.getComments(this.id);
+    },
     // 弹出回复框
     handleReply(comment) {
       this.currentComment = comment;
