@@ -23,7 +23,7 @@
     <view class="content">
       <view class="new_item">
         <image class="img" src="@/static/png/hudongtongzhi.png" alt="" />
-        <view class="text">
+        <view class="text" @click="goDetail('notice')">
           <text class="title">互动通知</text>
           <text class="content">您有一条新的消息</text>
         </view>
@@ -35,7 +35,7 @@
           src="@/static/png/zizhutuiguang.png"
           alt=""
         />
-        <view class="text">
+        <view class="text" @click="goDetail('activity')">
           <text class="title">活动助手</text>
           <text class="content">还未收到活动消息哦~</text>
         </view>
@@ -47,7 +47,7 @@
           src="@/static/png/xitongtongzhi-.png"
           alt=""
         />
-        <view class="text">
+        <view class="text" @click="goDetail('system')">
           <text class="title">系统通知</text>
           <text class="content">欢迎来到近邻</text>
         </view>
@@ -76,14 +76,10 @@ export default {
     this.capsuleRight = systemInfo.windowWidth - menuButton.right; // 胶囊右侧边距
   },
   methods: {
-    logout() {
-      this.$refs.alertDialog.open();
-    },
-    dialogConfirm() {
-      this.$refs.alertDialog.close();
-    },
-    dialogClose() {
-      this.$refs.alertDialog.close();
+    goDetail(type) {
+      uni.navigateTo({
+        url: `/pages/news/components/detail?type=${type}`,
+      });
     },
   },
 };
