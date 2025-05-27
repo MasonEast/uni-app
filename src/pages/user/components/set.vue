@@ -1,7 +1,7 @@
 <template>
   <view class="set_detail">
     <view class="card">
-      <view>关于我们</view>
+      <view>希望我们能给大家带来一点帮助~</view>
     </view>
     <view @click="logout" class="btn">退出登录</view>
   </view>
@@ -22,8 +22,8 @@
 export default {
   data() {
     return {
-      value: "",
-      title: "Hello",
+      value: '',
+      title: 'Hello',
     };
   },
   onLoad() {},
@@ -38,11 +38,11 @@ export default {
     },
     dialogConfirm() {
       this.$refs.alertDialog.close();
-      uni.clearStorageSync("token");
-      uni.clearStorageSync("userInfo");
+      uni.clearStorageSync('token');
+      uni.clearStorageSync('userInfo');
       uni.showToast({
-        title: "退出登录成功",
-        icon: "none",
+        title: '退出登录成功',
+        icon: 'none',
       });
       this.login();
     },
@@ -54,23 +54,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@use "variables";
-@use "mixins";
+@use 'variables';
+@use 'mixins';
 
 .set_detail {
   width: 100%;
   height: 100vh;
   background-color: #f5f7fa;
   box-sizing: border-box;
+  padding: 20px;
   .card {
     @include mixins.card;
+    margin: 0 0 20px 0;
   }
   .btn {
     @include mixins.btn;
     height: 45px;
     color: #999;
     border-radius: 10px;
-    margin-top: 20px;
+    margin: 0 0 20px 0;
   }
 }
 </style>

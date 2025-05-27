@@ -35,6 +35,13 @@ export default {
 
   },
 
+  // 消息
+    message: {
+    list: (params) => get("/message/list", { params }),
+    markAsRead: (data) => post("/message/mark-read", data),
+    markAllRead: (data) => post("/message/mark-all-read", data),
+  },
+
     // 评论相关
   comment: {
     create: (data) => post("/comment/create", data),

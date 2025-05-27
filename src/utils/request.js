@@ -1,7 +1,7 @@
 // utils/request.js
 
 // 基础路径
-const BASE_URL = "http://localhost:3000/api";
+const BASE_URL = "https://qgtu108894877.vicp.fun/api";
 
 // 请求拦截器
 const requestInterceptor = (config) => {

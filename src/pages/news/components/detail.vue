@@ -1,13 +1,16 @@
 <template>
   <view class="news_detail">
-    <view class="card">
+    <view class="card" v-for="item in data" :key="item._id">
       <view class="title">
-        <text>欢迎来到近邻</text>
-        <text class="time">2025-12-13 08:44</text>
+        <text>{{ item.title }}</text>
+        <uni-dateformat
+          class="time"
+          :date="item.createdAt"
+          :threshold="[0, 0]"
+          format="yyyy-MM-dd hh:mm"
+        />
       </view>
-      <view class="content">
-        近邻是一款基于地理位置的社交应用，旨在帮助用户发现附近的商家、活动和优惠信息。通过近邻，您可以轻松地找到附近的美食、购物、娱乐等资源，并与附近的用户互动交流。
-      </view>
+      <view class="content"> {{ item.content }} </view>
     </view>
   </view>
 </template>
@@ -16,12 +19,18 @@
 export default {
   data() {
     return {
-      value: '',
-      title: 'Hello',
+      type: '',
+      data: [],
     };
   },
   onLoad(options) {
     console.log(options, '------');
+    const { type, data } = options;
+    this.type = type;
+    this.data = JSON.parse(data);
+    this.$api.message.markAsRead({
+      messageIds: this.data.map((item) => item._id),
+    });
   },
   methods: {
     login() {
@@ -58,8 +67,11 @@ export default {
   height: 100vh;
   background-color: #f5f7fa;
   box-sizing: border-box;
+  padding: 10px;
   .card {
     @include mixins.card;
+    margin: 0 0 10px 0;
+    height: auto;
     .title {
       font-size: 16px;
       margin-bottom: 10px;

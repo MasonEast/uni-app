@@ -18,14 +18,31 @@
       >
         消息
       </view>
-      <img class="clear_img" src="@/static/png/qingchu.png" alt="" />
+      <img
+        class="clear_img"
+        src="@/static/png/qingchu.png"
+        alt=""
+        @click="clear"
+      />
     </view>
     <view class="content">
       <view class="new_item">
         <image class="img" src="@/static/png/hudongtongzhi.png" alt="" />
-        <view class="text" @click="goDetail('notice')">
-          <text class="title">互动通知</text>
-          <text class="content">您有一条新的消息</text>
+        <view class="text" @click="goDetail('interactive')">
+          <uni-badge
+            class="uni-badge-left-margin"
+            :text="messages?.interactive.unread"
+            absolute="rightTop"
+            :offset="[-2, -2]"
+            size="small"
+          >
+            <text class="title">互动通知</text>
+          </uni-badge>
+
+          <text v-if="messages?.interactive.unread > 0" class="content"
+            >您有 {{ messages?.interactive.unread }} 条新的消息</text
+          >
+          <text v-else class="content">还未收到新的互动通知哦~</text>
         </view>
       </view>
       <view class="new_item">
@@ -36,8 +53,20 @@
           alt=""
         />
         <view class="text" @click="goDetail('activity')">
-          <text class="title">活动助手</text>
-          <text class="content">还未收到活动消息哦~</text>
+          <uni-badge
+            class="uni-badge-left-margin"
+            :text="messages?.activity.unread"
+            absolute="rightTop"
+            :offset="[-2, -2]"
+            size="small"
+          >
+            <text class="title">活动助手</text>
+          </uni-badge>
+
+          <text v-if="messages?.activity.unread > 0" class="content"
+            >您有 {{ messages?.activity.unread }} 条新的消息</text
+          >
+          <text v-else class="content">还未收到新的活动消息哦~</text>
         </view>
       </view>
       <view class="new_item">
@@ -48,8 +77,19 @@
           alt=""
         />
         <view class="text" @click="goDetail('system')">
-          <text class="title">系统通知</text>
-          <text class="content">欢迎来到近邻</text>
+          <uni-badge
+            class="uni-badge-left-margin"
+            :text="messages?.system.length"
+            absolute="rightTop"
+            :offset="[-2, -2]"
+            size="small"
+          >
+            <text class="title">系统通知</text>
+          </uni-badge>
+          <text v-if="messages?.system.length > 0" class="content"
+            >您有 {{ messages?.system.length }} 条新的消息</text
+          >
+          <text v-else class="content">欢迎来到近邻~</text>
         </view>
       </view>
     </view>
@@ -65,6 +105,7 @@ export default {
       statusBarHeight: 0,
       navBarHeight: 0,
       capsuleRight: 0,
+      messages: {},
     };
   },
   onLoad() {
@@ -75,11 +116,20 @@ export default {
       (menuButton.top - systemInfo.statusBarHeight) * 2 + menuButton.height; // 导航栏总高度
     this.capsuleRight = systemInfo.windowWidth - menuButton.right; // 胶囊右侧边距
   },
+  async onShow() {
+    this.messages = await this.$api.message.list();
+  },
   methods: {
     goDetail(type) {
       uni.navigateTo({
-        url: `/pages/news/components/detail?type=${type}`,
+        url: `/pages/news/components/detail?type=${type}&data=${JSON.stringify(
+          this.messages[type].list
+        )}`,
       });
+    },
+    async clear() {
+      this.$api.message.markAllRead();
+      this.messages = await this.$api.message.list();
     },
   },
 };
