@@ -8,6 +8,11 @@ const requestInterceptor = (config) => {
   // 可以在这里添加 token 等全局参数
   const token = uni.getStorageSync("token");
   console.log("token", token, config.header);
+  if(!token){
+    uni.navigateTo({
+        url: `/pages/user/components/login`,
+      });
+  }
   if (token) {
     config.header = config.header || {};
     config.header["Authorization"] = `Bearer ${token}`;
